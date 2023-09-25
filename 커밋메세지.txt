@@ -1,0 +1,11 @@
+1. 각종 회원가입/ 로그인 관련 설정(김민재)
+- api.php 라우팅 등록 (회원가입, 로그인)
+- User 모델 마이그레이션 변경
+- 회원가입용 Request 생성
+- 회원가입, 로그인 Controller 생성
+    - 추가: g.yju.ac.kr 도메인만 가입 가능
+- Models\User.php 사용 컬럼 추가
+- Kernel.php에서 Sanctum 주석 해제
+
+
+
