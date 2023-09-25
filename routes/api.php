@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +30,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [LoginController::class, 'logout']);
 });
 
+// 회원 정보 수정
+Route::put('/user/update/{id}', [UserController::class, 'update']);
 
+
+// 회원 정보 삭제
+Route::delete('/user/delete/{id}', [UserController::class, 'delete']);
 
 
 
