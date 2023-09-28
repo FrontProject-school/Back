@@ -22,15 +22,11 @@ class RegisterController extends Controller
             ], 422);
         } 
 
-        $user = User::create($request->all());
-
-        // $token = $user->createToken('myAppToken')->plainTextToken;
+        User::create($request->all());
         
         return response()->json([
             'status'  => true,
-            // 'token' => $token,
             'message' => "회원이 정상적으로 등록 되었습니다.",
-            'user' => $user
         ],200);
     }
 }

@@ -6,8 +6,21 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 
+use Illuminate\Support\Facades\Auth;
+
 class UserController extends Controller
 {
+
+
+    // 유저 정보 불러오기
+    public function getInfo() {
+        $user = Auth::user();
+
+        return response()->json([
+            'user' => $user,
+        ]);
+    }
+
     public function update(Request $request, $id) {
         
         // 유저 검색 & 데이터 업데이트 
@@ -16,8 +29,7 @@ class UserController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => "회원정보가 정상적으로 수정되었습니다!",
-            'user' => $model
+            'message' => "회원정보가 정상적으로 수정되었습니다!"
         ],200);
     }
 
