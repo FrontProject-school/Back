@@ -6,6 +6,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ApplicantsController;
 use App\Http\Controllers\ProgramsController;
 
 /*
@@ -48,6 +49,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 });
 
-// 프로그램관련
+// 프로그램
 Route::apiResource('programs', ProgramsController::class);
-// Route::get('/programs/{num}', [ProgramsController::class, 'info']);
+
+// 지원하기
+Route::apiResource('applicants', ApplicantsController::class);
+Route::post('applicants/details', [ApplicantsController::class, 'details']);

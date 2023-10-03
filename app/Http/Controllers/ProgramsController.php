@@ -59,10 +59,11 @@ class ProgramsController extends Controller
     // 프로그램 상세 정보
     public function show(string $num)
     {
-        $info = Program::where('num', '=', $num)->first();
+        $info = Program::where('num', '=', $num)->first(); // 없으면 null
 
         if(!$info){
             return response()->json([
+                'info' => $info,
                 'err' => '해당하는 번호 없음',
             ], 400);
         }
@@ -94,7 +95,7 @@ class ProgramsController extends Controller
             return response()->json(
                 [
                     'msg' => '수정완료',
-                ], 500
+                ], 200
             );
             
         } else{
