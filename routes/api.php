@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApplicantsController;
 use App\Http\Controllers\ProgramsController;
+use PHPUnit\Framework\TestStatus\Notice;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,3 +56,17 @@ Route::apiResource('programs', ProgramsController::class);
 // 지원하기
 Route::apiResource('applicants', ApplicantsController::class);
 Route::post('applicants/details', [ApplicantsController::class, 'details']);
+
+// 게시판
+Route::get('/freeboards', [FreeboardController::class, 'index']);
+Route::post('/freeboards', [FreeboardController::class, 'store']);
+Route::get('/freeboards/{num}', [FreeboardController::class, 'show']);
+Route::put('/freeboards/{num}', [FreeboardController::class, 'update']);
+Route::delete('/freeboards/{num}', [FreeboardController::class, 'destroy']);
+
+// 공지사항
+Route::get('/notices', [NoticeController::class, 'index']);
+Route::post('/notices', [NoticeController::class, 'store']);
+Route::get('/notices/{num}', [NoticeController::class, 'show']);
+Route::put('/notices/{num}', [NoticeController::class, 'update']);
+Route::delete('/notices/{num}', [NoticeController::class, 'destroy']);
