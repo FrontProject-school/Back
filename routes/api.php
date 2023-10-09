@@ -48,6 +48,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::prefix('admin')->group(function () {
         Route::apiResource('/panel', AdminController::class);
     });
+
+    // 관리자 권한 확인용 미들웨어
+    Route::middleware(['role:admin'])->group(function() {
+        // 여기에 관리자용 api 담아주시면 됩니다..
+    });
 });
 
 // 프로그램
