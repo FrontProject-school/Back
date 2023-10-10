@@ -21,11 +21,6 @@ use PHPUnit\Framework\TestStatus\Notice;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-
 // 회원가입 / 로그인
 Route::post('/regist', [RegisterController::class,'regist']);
 Route::post('/login', [LoginController::class, 'login']);
