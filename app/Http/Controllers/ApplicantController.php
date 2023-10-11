@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
-class ApplicantsController extends Controller
+class ApplicantController extends Controller
 {
     // 전체 지원목록 확인
     public function index()
@@ -24,12 +24,6 @@ class ApplicantsController extends Controller
         );
     }
 
-    // 지원 입력폼
-    public function create()
-    {
-        //
-    }
-
     // 지원 등록
     public function store(Request $req)
     {
@@ -41,7 +35,7 @@ class ApplicantsController extends Controller
         $applicant->answer = $req->answer;
 
         $stuIdCheck = count(DB::table('users')->where('stuId', '=', $applicant->stuId)->get()) == 0 ? true : false;
-        $programCheck = count(DB::table('programs')->where('num', '=', $applicant->program)->get()) == 0 ? true : false;
+        $programCheck = count(DB::table('programs')->where('pId', '=', $applicant->program)->get()) == 0 ? true : false;
         if($stuIdCheck){
             return response()->json(
                 [
@@ -74,8 +68,8 @@ class ApplicantsController extends Controller
         );
     }
 
-    // 학생 지원목록 확인
-    public function show(string $stuId)
+    // 학생별 지원 목록
+    public function myApplicants(string $stuId)
     {
         $info = Applicant::where('stuId', '=', $stuId)->get(); // 없으면 빈 배열
 
@@ -88,10 +82,13 @@ class ApplicantsController extends Controller
         );
     }
 
-    // 학생 단일 프로그램 지원 정보 확인
+    // 학생별 단일 프로그램 지원 정보 확인
     public function details(Request $req)
     {
-        $result = Applicant::where('num', '=', $req->num)->get();
+        $result = Applicant::where([
+            ['stuId', '=', $req->stuId],
+            ['program', '=', $req->program]
+        ])->get();
 
         return response()->json(
             [
@@ -102,16 +99,10 @@ class ApplicantsController extends Controller
         );
     }
 
-    // 지원 수정 폼
-    public function edit(Applicant $applicant)
-    {
-        //
-    }
-
     // 지원 수정
-    public function update(Request $req, string $num)
+    public function update(Request $req, string $id)
     {
-        $result = Applicant::where('num', '=', $num)->first();
+        $result = Applicant::where('id', '=', $id)->first();
 
         if($result){
             $result->update($req->all());
@@ -132,9 +123,9 @@ class ApplicantsController extends Controller
     }
 
     // 지원 삭제
-    public function destroy(string $num)
+    public function destroy(string $id)
     {
-        Applicant::where('num', '=', $num)->delete();
+        Applicant::where('id', '=', $id)->delete();
         return response()->json(
             [
                 'status'  => true,

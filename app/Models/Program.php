@@ -22,7 +22,7 @@ class Program extends Model
     protected $primaryKey = 'num';
 
     protected $fillable = [
-        'num',
+        'pId',
         'title',
         'selectNum',
         'rStart',
@@ -34,7 +34,7 @@ class Program extends Model
     // 파라미터 키값 지정
     public function getRouteKeyName()
     {
-        return 'num';
+        return 'pId';
     }
 
 }

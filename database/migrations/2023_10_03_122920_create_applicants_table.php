@@ -12,14 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('applicants', function (Blueprint $table) {
-            $table->smallInteger('num')->autoIncrement();
+            $table->id();
             $table->string('stuId')->nullable(false);
             $table->string('program', 50)->nullable(false);
             $table->string('answer', 200)->nullable(false);
+            $table->string('selected', 2)->nullable();
             $table->timestamps();
 
-            $table->foreign('stuId')->references('stuId')->on('users')->cascadeOnDelete();
-            $table->foreign('program')->references('num')->on('programs')->cascadeOnDelete();
+            $table->foreign('stuId')->references('stuId')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('program')->references('pId')->on('programs')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

@@ -6,7 +6,7 @@ use App\Models\Program;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ProgramsController extends Controller
+class ProgramController extends Controller
 {
     // 프로그램 목록
     public function index()
@@ -43,7 +43,7 @@ class ProgramsController extends Controller
         
         $type = $program->title == '한일교류' ? 'A' : 'B';
         
-        $program->num = date('y').'-'.$type.(count(Program::all()) + 1);
+        $program->pId = date('y').'-'.$type.(count(Program::all()) + 1);
 
         $program->save();
         
@@ -57,9 +57,9 @@ class ProgramsController extends Controller
     }
 
     // 프로그램 상세 정보
-    public function show(string $num)
+    public function show(string $pId)
     {
-        $info = Program::where('num', '=', $num)->first(); // 없으면 null
+        $info = Program::where('pId', '=', $pId)->first(); // 없으면 null
 
         if(!$info){
             return response()->json([
@@ -84,10 +84,10 @@ class ProgramsController extends Controller
     }
 
     // 프로그램 정보 수정
-    public function update(Request $req, string $num)
+    public function update(Request $req, string $pId)
     {
         
-        $result = Program::find($num);
+        $result = Program::find($pId);
 
         if($result){
             $result->update($req->all());
@@ -112,7 +112,7 @@ class ProgramsController extends Controller
     // 프로그램 삭제
     public function destroy(Program $program)
     {
-        $program->where('num', '=', $program)->delete();
+        $program->where('pId', '=', $program)->delete();
         return response()->json(
             [
                 'status'  => true,
