@@ -70,9 +70,9 @@ class NoticeController extends Controller
     }
 
     public function update(Request $request, $num) {
-        $notice = Notice::where('num', '=', $num)->first();
+        $notice = Notice::where('num','=',$num)->first();
 
-        if (!$notice) {
+        if(!$notice) {
             return response()->json([
                 'err' => '존재하지 않는 공지사항입니다.'
             ], 404);
@@ -84,6 +84,7 @@ class NoticeController extends Controller
         $notice->content = $request->content;
         $notice->confirm = $request->confirm;
 
+        // $notice->update($request->all()); // 하단 코드 대체용
         $notice->save();
 
         return response()->json([

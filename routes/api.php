@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\NoticeController;
 use PHPUnit\Framework\TestStatus\Notice;
 
 /*
@@ -25,6 +26,7 @@ use PHPUnit\Framework\TestStatus\Notice;
 Route::post('/regist', [RegisterController::class,'regist']);
 Route::post('/login', [LoginController::class, 'login']);
 
+// 로그인 확인용 미들웨어 (유저, 관리자)
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // 관리자, 유저 로그아웃 통합 
     Route::post('/logout', [LoginController::class, 'logout']);
@@ -37,6 +39,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::put('/update/{id}', [UserController::class, 'update']);
         // 삭제
         Route::delete('/delete/{id}', [UserController::class, 'delete']);
+        // 리스트 받기
+        Route::get('/list',[UserController::class, 'getUserList'])
+        ->middleware('role:admin');
     });
 
     // 관리자 (등록 / 삭제), 총관리자 변경
