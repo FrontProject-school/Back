@@ -12,14 +12,15 @@ use Illuminate\Support\Facades\Auth;
 class AdminController extends Controller
 {
     /**
-     *      현재 로그인된 관리자 정보
+     *      현재 등록 된 관리자 정보 리스트 호출
      */
     public function index()
     {
-        $admin = Auth::user();
+        $admin = Admin::all();
 
         return response()->json([
-            'admin' => $admin,
+            'status' => true,
+            'admin list' => $admin,
         ]);
     }
 
@@ -67,11 +68,23 @@ class AdminController extends Controller
      }
  
      /**
-      * Display the specified resource.
+      *     특정 관리자 정보 호출
       */
-     public function show(Admin $admin)
+     public function show($id)
      {
-         //
+        $admin1 = Admin::where('id',$id)->first();
+        // $admin = Auth::user();
+        if($admin1){
+            return response()->json([
+                'status' => true,
+                'admin' => $admin1,
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'admin' => null,
+            ]);
+        }
      }
  
      /**
