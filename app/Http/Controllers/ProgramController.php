@@ -32,6 +32,8 @@ class ProgramController extends Controller
     public function store(Request $req)
     {
 
+        // json형식으로 받기로 수정 필요
+
         $program = new Program;
 
         $program->title = $req->title;
@@ -40,13 +42,17 @@ class ProgramController extends Controller
         $program->rEnd = $req->rEnd;
         $program->actStart = $req->actStart;
         $program->actEnd = $req->actEnd;
-        
+
         $type = $program->title == '한일교류' ? 'A' : 'B';
-        
-        $program->pId = date('y').'-'.$type.(count(Program::all()) + 1);
+
+        $program->pId = date('y') . '-' . $type . (count(Program::all()) + 1);
 
         $program->save();
+
         
+
+
+
         return response()->json(
             [
                 'status'  => true,
@@ -61,7 +67,7 @@ class ProgramController extends Controller
     {
         $info = Program::where('pId', '=', $pId)->first(); // 없으면 null
 
-        if(!$info){
+        if (!$info) {
             return response()->json([
                 'info' => $info,
                 'err' => '해당하는 번호 없음',
@@ -72,9 +78,9 @@ class ProgramController extends Controller
             [
                 'info' => $info,
                 'msg' => '불러오기 성공',
-            ], 200
+            ],
+            200
         );
-
     }
 
     // 프로그램 정보수정 폼
@@ -86,27 +92,26 @@ class ProgramController extends Controller
     // 프로그램 정보 수정
     public function update(Request $req, string $pId)
     {
-        
+
         $result = Program::find($pId);
 
-        if($result){
+        if ($result) {
             $result->update($req->all());
 
             return response()->json(
                 [
                     'msg' => '수정완료',
-                ], 200
+                ],
+                200
             );
-            
-        } else{
+        } else {
             return response()->json(
                 [
                     'err' => '번호가 일치하지 않음',
-                ], 500
+                ],
+                500
             );
         }
-
-        
     }
 
     // 프로그램 삭제

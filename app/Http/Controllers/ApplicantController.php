@@ -85,9 +85,11 @@ class ApplicantController extends Controller
     // 학생별 단일 프로그램 지원 정보 확인
     public function details(Request $req)
     {
+        $data = json_decode($req->getContent());
+
         $result = Applicant::where([
-            ['stuId', '=', $req->stuId],
-            ['program', '=', $req->program]
+            ['stuId', '=', $data->stuId],
+            ['program', '=', $data->program]
         ])->get();
 
         return response()->json(

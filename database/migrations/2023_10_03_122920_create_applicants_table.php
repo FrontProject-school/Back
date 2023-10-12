@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('stuId')->nullable(false);
             $table->string('program', 50)->nullable(false);
             $table->string('answer', 200)->nullable(false);
-            $table->string('selected', 2)->nullable();
+            $table->string('selected', 1)->nullable();
             $table->timestamps();
 
             $table->foreign('stuId')->references('stuId')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
