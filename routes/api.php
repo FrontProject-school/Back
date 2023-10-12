@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+// controller 
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
@@ -9,6 +10,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\FreeboardController;
+
 use PHPUnit\Framework\TestStatus\Notice;
 
 /*
