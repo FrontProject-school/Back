@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('position');
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('email')->references('email')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

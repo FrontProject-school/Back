@@ -17,7 +17,7 @@ class RegisterController extends Controller
         // G-suite 계정이 아닌 경우
         if ($is_not_g_suite_mail) {
             return response()->json([
-                'status' => true,
+                'status' => false,
                 'message' => 'G-suite 계정이 아닙니다.',
             ], 422);
         } 

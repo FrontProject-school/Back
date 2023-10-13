@@ -39,32 +39,38 @@ class AdminController extends Controller
      public function store(Request $request)
      {
         $check_data = User::where('email', $request->email)->first();
+        
         if(!$check_data){
         return response()->json([
             'status' => false,
             'message' => '해당 계정이 존재하지 않습니다.',
-            'data' => null ,
          ],404);
         } else {
-            
-        // 관리자 정보등록에 필요한 컬럼만 추출
-        $data = [
-            "name" => $check_data["name"],
-            "email" => $check_data["email"],
-            "phone" => $check_data["phone"],
-            "position" => "admin"
-        ];
- 
-        // 관리자 계정 등록
-        Admin::create($data);
- 
-        return response()->json([
-            'status' => true,
-            'message' => '관리자가 추가되었습니다',
-            ],200);
-        }
- 
+            $check_admin_data = Admin::where('email', $request->email)->first();
+            if($check_admin_data) {
+                return response()->json([
+                    'status' => false,
+                    'message' => '해당 계정은 이미 등록되어 있습니다.',
+                 ],404);
+            } else {
+                // 관리자 정보등록에 필요한 컬럼만 추출
+                $data = [
+                    "name" => $check_data["name"],
+                    "email" => $check_data["email"],
+                    "phone" => $check_data["phone"],
+                    "position" => "admin"
+                ];
+                
+                // 관리자 계정 등록
+                Admin::create($data);
         
+                return response()->json([
+                    'status' => true,
+                    'message' => '관리자가 추가되었습니다',
+                    ],200);
+                    }
+        
+        }
      }
  
      /**
