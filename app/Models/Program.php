@@ -19,10 +19,11 @@ class Program extends Model
     // protected $table = 'programRegisters';
 
     // 기본키 지정
-    protected $primaryKey = 'num';
+    protected $primaryKey = 'pId';
 
     protected $fillable = [
         'pId',
+        'category',
         'title',
         'selectNum',
         'rStart',

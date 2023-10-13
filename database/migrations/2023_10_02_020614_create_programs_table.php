@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('programs', function (Blueprint $table) {
             $table->string('pId', 50)->primary();
-            $table->string('title', 50)->nullable(false);
+            $table->string('category', 50)->nullable(false);
+            $table->string('title')->nullable(false);
             $table->smallInteger('selectNum')->nullable(false);
             $table->datetime('rStart')->nullable(false);
             $table->datetime('rEnd')->nullable(false);

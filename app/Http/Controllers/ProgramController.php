@@ -36,6 +36,7 @@ class ProgramController extends Controller
 
         $program = new Program;
 
+        $program->category = $req->category;
         $program->title = $req->title;
         $program->selectNum = $req->selectNum;
         $program->rStart = $req->rStart;
@@ -43,7 +44,7 @@ class ProgramController extends Controller
         $program->actStart = $req->actStart;
         $program->actEnd = $req->actEnd;
 
-        $type = $program->title == '한일교류' ? 'A' : 'B';
+        $type = $program->category == '한일교류' ? 'A' : 'B';
 
         $program->pId = date('y') . '-' . $type . (count(Program::all()) + 1);
 
