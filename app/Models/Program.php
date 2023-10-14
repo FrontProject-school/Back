@@ -20,11 +20,14 @@ class Program extends Model
 
     // 기본키 지정
     protected $primaryKey = 'pId';
+    public $incrementing = false; // 기본키로 설정하면 자동 auto_increment가 적용되기 때문에 취소해 주자
+    protected $keyType = 'string';
 
     protected $fillable = [
         'pId',
         'category',
         'title',
+        'grade',
         'selectNum',
         'rStart',
         'rEnd',

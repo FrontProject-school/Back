@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('programs', function (Blueprint $table) {
-            $table->string('pId', 50)->primary();
+            $table->string('pId', 100)->primary();
             $table->string('category', 50)->nullable(false);
             $table->string('title')->nullable(false);
             $table->smallInteger('selectNum')->nullable(false);
+            $table->string('grade', 10)->nullable(false);
             $table->datetime('rStart')->nullable(false);
             $table->datetime('rEnd')->nullable(false);
             $table->date('actStart')->nullable(false);

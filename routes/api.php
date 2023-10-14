@@ -59,7 +59,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
 // 프로그램
-Route::apiResource('program', ProgramController::class);
+Route::apiResource('program', ProgramController::class)->except([
+    'create', 'show', 'edit'
+]);
+Route::post('program/programInfo/{pId}', [ProgramController::class, 'programInfo']);
 
 // 지원하기
 Route::apiResource('applicant', ApplicantController::class)->except([
