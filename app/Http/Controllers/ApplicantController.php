@@ -35,6 +35,7 @@ class ApplicantController extends Controller
         $applicant->answer = $req->answer;
 
         $stuIdCheck = count(DB::table('users')->where('stuId', '=', $applicant->stuId)->get()) == 0 ? true : false;
+        
         $programCheck = count(DB::table('programs')->where('pId', '=', $applicant->program)->get()) == 0 ? true : false;
         if($stuIdCheck){
             return response()->json(

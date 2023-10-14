@@ -78,7 +78,7 @@ class AdminController extends Controller
       */
      public function show($id)
      {
-        $admin1 = Admin::where('id',$id)->first();
+        $admin1 = Admin::where('adminNum',$id)->first();
         // $admin = Auth::user();
         if($admin1){
             return response()->json([
@@ -121,7 +121,7 @@ class AdminController extends Controller
         ->update(['position' => 'general_admin']);
 
         // // "position"을 "admin"으로 업데이트
-        Admin::where('id', $id)->update(['position' => 'admin']);
+        Admin::where('adminNum', $id)->update(['position' => 'admin']);
         return response()->json([
             'status' => true,
             'message' => "관리자가 정상적으로 위임되었습니다!"
