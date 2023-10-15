@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Logics;
 
-use App\Http\Controllers\Controller;
 use App\Models\Image;
-use Illuminate\Http\Request;
 
-class ImageController extends Controller
+class ImageLogic
 {
     // 이미지 등록
     public function insertImgs($imgList, $uId, $category){
