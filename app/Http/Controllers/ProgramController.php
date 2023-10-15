@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Program;
 use App\Http\Controllers\Controller;
-use App\Models\Image;
+use App\Http\Logics\ImageLogic;
 use App\Models\RecruitDepart;
 use App\Models\RecruitLang;
 use Carbon\Carbon;
@@ -143,7 +143,7 @@ class ProgramController extends Controller
         $this->infoProcess($data, $program);
 
         if($req->hasFile('images')){ // 이미지 전달 확인
-            $imageClass = new ImageController;
+            $imageClass = new ImageLogic;
             $imageClass->insertImgs($imgList, $program->pId, 'program');
         }
 
@@ -164,7 +164,7 @@ class ProgramController extends Controller
         
         $info = $this->showInfo($program, $pId);
 
-        $imageClass = new ImageController;
+        $imageClass = new ImageLogic;
         $images = $imageClass->showImgs($pId, 'program');
 
         if (!$info) {
@@ -198,7 +198,7 @@ class ProgramController extends Controller
         RecruitDepart::where('program', '=', $pId)->delete();
         RecruitLang::where('program', '=', $pId)->delete();
 
-        $imageClass = new ImageController;
+        $imageClass = new ImageLogic;
         $imageClass->deleteImgs($pId, 'program');
 
         if ($program) {
@@ -231,7 +231,7 @@ class ProgramController extends Controller
     {
         $cofirm = Program::where('pId', '=', $pId)->delete();
 
-        $imageClass = new ImageController;
+        $imageClass = new ImageLogic;
         $imageClass->deleteImgs($pId, 'program');
 
         $result = [
