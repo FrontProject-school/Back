@@ -13,8 +13,6 @@ class Admin extends Authenticatable
 {
     use HasFactory, HasApiTokens;
 
-    protected $primaryKey = 'adminNum';
-
     /**
      * The attributes that are mass assignable.
      *
