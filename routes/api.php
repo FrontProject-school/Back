@@ -84,3 +84,4 @@ Route::post('/notices', [NoticeController::class, 'store']);
 Route::get('/notices/{num}', [NoticeController::class, 'show']);
 Route::put('/notices/{num}', [NoticeController::class, 'update']);
 Route::delete('/notices/{num}', [NoticeController::class, 'destroy']);
+
