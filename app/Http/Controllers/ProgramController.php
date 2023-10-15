@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Program;
 use App\Http\Controllers\Controller;
+use App\Models\Image;
 use App\Models\RecruitDepart;
 use App\Models\RecruitLang;
 use Carbon\Carbon;
@@ -113,7 +114,11 @@ class ProgramController extends Controller
     public function store(Request $req)
     {
 
-        $data = $req->all(); // 라라벨에서 자동으로 배열형태로 바꿔준다
+        // $data = $req->all(); // 라라벨에서 자동으로 배열형태로 바꿔준다
+
+        $data = json_decode($req->input('json'), true);
+
+        $imgList = $req->file('images');
 
         $program = new Program;
 
@@ -137,6 +142,11 @@ class ProgramController extends Controller
 
         $this->infoProcess($data, $program);
 
+        if($req->hasFile('images')){ // 이미지 전달 확인
+            $imageClass = new ImageController;
+            $imageClass->insertImgs($imgList, $program->pId, 'program');
+        }
+
         return response()->json(
             [
                 'data' => $data,
@@ -154,9 +164,13 @@ class ProgramController extends Controller
         
         $info = $this->showInfo($program, $pId);
 
+        $imageClass = new ImageController;
+        $images = $imageClass->showImgs($pId, 'program');
+
         if (!$info) {
             return response()->json([
                 'info' => $info,
+                'images' => $images,
                 'err' => '해당하는 번호 없음',
             ], 400);
         }
@@ -164,6 +178,7 @@ class ProgramController extends Controller
         return response()->json(
             [
                 'info' => $info,
+                'images' => $images,
                 'msg' => '불러오기 성공',
             ],
             200
@@ -174,16 +189,26 @@ class ProgramController extends Controller
     public function update(Request $req, string $pId)
     {
 
-        $data = $req->all();
+        // $data = $req->all();
+        $data = json_decode($req->input('json'), true);
+
+        $imgList = $req->file('images');
 
         $program = Program::find($pId);
         RecruitDepart::where('program', '=', $pId)->delete();
         RecruitLang::where('program', '=', $pId)->delete();
 
+        $imageClass = new ImageController;
+        $imageClass->deleteImgs($pId, 'program');
+
         if ($program) {
             // $program->update($req->all());
 
             $this->infoProcess($data, $program);
+
+            if($req->hasFile('images')){ // 이미지 전달 확인
+                $imageClass->insertImgs($imgList, $program->pId, 'program');
+            }
 
             return response()->json(
                 [
@@ -205,6 +230,9 @@ class ProgramController extends Controller
     public function destroy(string $pId)
     {
         $cofirm = Program::where('pId', '=', $pId)->delete();
+
+        $imageClass = new ImageController;
+        $imageClass->deleteImgs($pId, 'program');
 
         $result = [
             'status'  => true,
