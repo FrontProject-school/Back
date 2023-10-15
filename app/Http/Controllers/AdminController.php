@@ -115,7 +115,7 @@ class AdminController extends Controller
                 'message' => '총 관리자가 아닙니다.',
             ]);
         }
-        // 총 관리자 유저 찾아 직급 변경
+        // 유저 찾아 직급 변경
         $email = $request->input('email');
         Admin::where('email', $email)
         ->update(['position' => 'general_admin']);
