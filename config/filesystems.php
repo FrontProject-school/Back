@@ -58,25 +58,25 @@ return [
 
         'program' => [
             'driver' => 'local',
-            'root' => 'D:\projectImgs\program',
+            'root' => 'D:\projectImgs',
             'throw' => false,
         ],
 
         'notice' => [
             'driver' => 'local',
-            'root' => 'D:\projectImgs\notice',
+            'root' => 'D:\projectImgs',
             'throw' => false,
         ],
 
         'freeboard' => [
             'driver' => 'local',
-            'root' => 'D:\projectImgs\freeboard',
+            'root' => 'D:\projectImgs',
             'throw' => false,
         ],
 
         'baner' => [
             'driver' => 'local',
-            'root' => 'D:\projectImgs\baner',
+            'root' => 'D:\projectImgs',
             'throw' => false,
         ],
     ],

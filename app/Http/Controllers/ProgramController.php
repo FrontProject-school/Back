@@ -116,11 +116,24 @@ class ProgramController extends Controller
 
         // $data = $req->all(); // 라라벨에서 자동으로 배열형태로 바꿔준다
 
-        $data = json_decode($req->input('json'), true);
-
-        $imgList = $req->file('images');
+        // $data = json_decode($req->input('json'), true);
 
         $program = new Program;
+
+        $data = [
+            'category' => $req->category,
+            'title' => $req->title,
+            'grade' => $req->grade,
+            'depart' => $req->depart,
+            'lang' => $req->lang,
+            'selectNum'  => $req->selectNum,
+            'rStart' => $req->rStart,
+            'rEnd' => $req->rEnd,
+            'actStart' => $req->actStart,
+            'actEnd' => $req->actEnd
+        ];
+
+        var_dump($data);
 
         $program->category = $data['category'];
         $type = $program->category == '한일교류' ? 'A' : 'B';
@@ -142,7 +155,11 @@ class ProgramController extends Controller
 
         $this->infoProcess($data, $program);
 
-        if($req->hasFile('images')){ // 이미지 전달 확인
+        echo "여기까지 도달";
+        // 이미지 전달 확인
+        if($req->hasFile('images')){ 
+            echo "이미지 부분";
+            $imgList = $req->file('images');
             $imageClass = new ImageLogic;
             $imageClass->insertImgs($imgList, $program->pId, 'program');
         }
@@ -190,9 +207,21 @@ class ProgramController extends Controller
     {
 
         // $data = $req->all();
-        $data = json_decode($req->input('json'), true);
+        // $data = json_decode($req->input('json'), true);
+        $data = [
+            'category' => $req->category,
+            'title' => $req->title,
+            'grade' => $req->grade,
+            'depart' => $req->depart,
+            'lang' => $req->lang,
+            'selectNum'  => $req->selectNum,
+            'rStart' => $req->rStart,
+            'rEnd' => $req->rEnd,
+            'actStart' => $req->actStart,
+            'actEnd' => $req->actEnd
+        ];
 
-        $imgList = $req->file('images');
+        var_dump($data);
 
         $program = Program::find($pId);
         RecruitDepart::where('program', '=', $pId)->delete();
@@ -207,6 +236,7 @@ class ProgramController extends Controller
             $this->infoProcess($data, $program);
 
             if($req->hasFile('images')){ // 이미지 전달 확인
+                $imgList = $req->file('images');
                 $imageClass->insertImgs($imgList, $program->pId, 'program');
             }
 
