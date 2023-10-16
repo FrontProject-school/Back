@@ -85,3 +85,5 @@ Route::get('/notices/{num}', [NoticeController::class, 'show']);
 Route::put('/notices/{num}', [NoticeController::class, 'update']);
 Route::delete('/notices/{num}', [NoticeController::class, 'destroy']);
 
+// 단순 테스트 라우트
+Route::get('/test',[UserController::class, 'getTest']);

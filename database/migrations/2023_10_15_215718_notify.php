@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('nofify', function (Blueprint $table) {
+        Schema::create('nofifys', function (Blueprint $table) {
             $table->id();
             $table->string('stuId');
             $table->string('check',1);

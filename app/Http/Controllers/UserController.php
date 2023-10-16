@@ -6,11 +6,29 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 
+use App\Models\Program;
+use App\Models\Applicant;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    public function getTest() {
+        $value1 = Program::where('rEnd', '<', now())
+                    ->pluck('pId')
+                    ->toArray();
 
+        $value2 = Applicant::where('program','=',$value1)
+                    ->where('selected', 'T')
+                    ->pluck('stuId')
+                    ->toArray();
+        
+        return response()->json([
+            'value' => $value2,
+        ]);
+    }
     // 유저 정보 리스트 불러오기 (관리자 미들웨어 등록)
     public function getUserList(){
         $user = User::all();
