@@ -24,9 +24,12 @@ class UserController extends Controller
 
         $value2 = Applicant::where('program','=',$value1)
                     ->where('selected', 'T')
-                    ->pluck('stuId')
-                    ->toArray();
+                    ->get(['stuId', 'program']);
         
+        // 배열을 받아 
+        // 알림 테이블에 새로 데이터 저장 로직 
+        // 아직 미구현
+
         return response()->json([
             'value' => $value2,
         ]);

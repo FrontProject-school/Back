@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('notifies', function (Blueprint $table) {
             $table->id();
             $table->string('stuId');
-            $table->string('check',1);
-            $table->string('link');
+            $table->string('check',1)->default('N');
+            $table->string('pId');
             $table->timestamps();
 
             $table->foreign('stuId')->references('stuId')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('pId')->references('pId')->on('program')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
