@@ -114,6 +114,7 @@ class ProgramController extends Controller
     public function store(Request $req)
     {
 
+        return response($req);
         // $data = $req->all(); // 라라벨에서 자동으로 배열형태로 바꿔준다
 
         $data = json_decode($req->input('json'), true);
