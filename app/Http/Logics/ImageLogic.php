@@ -12,7 +12,9 @@ class ImageLogic
             $image = new Image;
 
             $imgName = $item->getClientOriginalName();
-            $item->storeAs($category, $imgName, $category);
+            $url =  $item->storeAs(('img/'.$category), $imgName, 'public');
+
+            echo $url;
 
             $image->category = $category;
             $image->uId = $uId;
