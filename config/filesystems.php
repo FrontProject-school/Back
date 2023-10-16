@@ -56,29 +56,6 @@ return [
             'throw' => false,
         ],
 
-        'program' => [
-            'driver' => 'local',
-            'root' => 'D:\projectImgs',
-            'throw' => false,
-        ],
-
-        'notice' => [
-            'driver' => 'local',
-            'root' => 'D:\projectImgs',
-            'throw' => false,
-        ],
-
-        'freeboard' => [
-            'driver' => 'local',
-            'root' => 'D:\projectImgs',
-            'throw' => false,
-        ],
-
-        'baner' => [
-            'driver' => 'local',
-            'root' => 'D:\projectImgs',
-            'throw' => false,
-        ],
     ],
 
     /*

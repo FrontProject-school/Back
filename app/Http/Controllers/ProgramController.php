@@ -91,20 +91,29 @@ class ProgramController extends Controller
     public function index()
     {
         $programs = Program::all();
-
-        $infoList = [];
-
-        $programs->each(function ($item) use (&$infoList){
-
+        
+        $programList = [];
+        
+        $programs->each(function ($item) use (&$programList){
+            $program = [];
+            
             $info = $this->showInfo($item, $item->pId);
+            
+            $imageClass = new ImageLogic;
+            $images = $imageClass->showImgs($item->pId, 'program');
+            
+            $program = [
+                'info' => $info,
+                'images' => $images
+            ];
 
-            array_push($infoList, $info);
+            array_push($programList, $program);
         });
 
         return response()->json(
             [
                 'status'  => true,
-                'infoList' => $infoList
+                'programList' => $programList
             ],
             200
         );
@@ -185,18 +194,21 @@ class ProgramController extends Controller
         $imageClass = new ImageLogic;
         $images = $imageClass->showImgs($pId, 'program');
 
+        $programInfo = [
+            'info' => $info,
+            'images' => $images
+        ];
+
         if (!$info) {
             return response()->json([
-                'info' => $info,
-                'images' => $images,
+                'programInfo' => $programInfo,
                 'err' => '해당하는 번호 없음',
             ], 400);
         }
 
         return response()->json(
             [
-                'info' => $info,
-                'images' => $images,
+                'programInfo' => $programInfo,
                 'msg' => '불러오기 성공',
             ],
             200
@@ -221,8 +233,6 @@ class ProgramController extends Controller
             'actStart' => $req->actStart,
             'actEnd' => $req->actEnd
         ];
-
-        var_dump($data);
 
         $program = Program::find($pId);
         RecruitDepart::where('program', '=', $pId)->delete();

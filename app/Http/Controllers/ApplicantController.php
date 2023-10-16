@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\DB;
 
 class ApplicantController extends Controller
 {
+    // // 관리자 학생 선발
+    // public function applicantSelection(string $aId){
+
+    // }
+
+
     // 전체 지원목록 확인
     public function index()
     {
