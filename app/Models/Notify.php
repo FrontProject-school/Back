@@ -13,6 +13,6 @@ class Notify extends Model
         'id',
         'stuId',
         'check',
-        'link'
+        'pId'
     ];
 }

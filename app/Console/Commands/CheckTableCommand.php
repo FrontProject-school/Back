@@ -3,6 +3,12 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+
+use App\Models\Program;
+use App\Models\Applicant;
+use App\Models\Notify;
+
+
 use Illuminate\Support\Facades\DB;
 
 class CheckTableCommand extends Command
@@ -26,10 +32,21 @@ class CheckTableCommand extends Command
      */
     public function handle()
     {   
-        $programs = DB::table('programs')
-                ->where('rEnd', '<', now())
-                ->pluck('pId')
-                ->toArray();
-        return 'hi';
+        $value1 = Program::where('rEnd', '<', now())
+                    ->pluck('pId')
+                    ->toArray();
+
+        $value2 = Applicant::whereIn('program',$value1)
+                    ->where('selected', 'T')
+                    ->get(['stuId', 'program']);
+        
+        foreach ($value2 as $item) {
+            Notify::firstOrCreate([         // firstOrCreate 메서드는 동일 값 존재시 pass 해줌
+                'stuId' => $item['stuId'],
+                'pId' => $item['program'],
+            ]);
+        }            
+
+        $this->info("알림이 생성 되었습니다.");
     }
 }

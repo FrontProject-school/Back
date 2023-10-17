@@ -11,7 +11,7 @@ use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\FreeboardController;
-
+use App\Http\Controllers\NotifyController;
 use PHPUnit\Framework\TestStatus\Notice;
 
 /*
@@ -31,6 +31,12 @@ Route::post('/login', [LoginController::class, 'login']);
 
 // 로그인 확인용 미들웨어 (유저, 관리자)
 Route::group(['middleware' => ['auth:sanctum']], function () {
+
+    // 알림
+    Route::apiResource('/notify', NotifyController::class)->except([
+        'create', 'show', 'edit'
+    ]);
+
     // 관리자, 유저 로그아웃 통합 
     Route::post('/logout', [LoginController::class, 'logout']);
 
@@ -85,5 +91,4 @@ Route::get('/notices/{num}', [NoticeController::class, 'show']);
 Route::put('/notices/{num}', [NoticeController::class, 'update']);
 Route::delete('/notices/{num}', [NoticeController::class, 'destroy']);
 
-// 단순 테스트 라우트
-Route::get('/test',[UserController::class, 'getTest']);
+

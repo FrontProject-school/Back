@@ -4,7 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-
+use App\Console\Commands\CheckTableCommand;
 class Kernel extends ConsoleKernel
 {
     /**
@@ -13,7 +13,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('table:check')->daily();
+        
+        // 하루 지날 때마다 
+        // 선정이 지난 프로그램 선정결과에 대한 알림
+        $schedule->command('app:check-table-command')->everyMinute();
     }
 
     /**
