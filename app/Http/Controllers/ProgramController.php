@@ -13,123 +13,9 @@ use Illuminate\Support\Str;
 
 class ProgramController extends Controller
 {
-
-    // 정보 처리
-    public function infoProcess($data, $program){
-        $program->title = $data['title'];
-        $program->selectNum = $data['selectNum'];
-        $program->actStart = $data['actStart'];
-        $program->actEnd = $data['actEnd'];
-        
-        // isset() : $data 안에 grade라는 key가 있는지 확인
-        // is_array() : $data['grade']의 값이 배열인지 확인
-        if (isset($data['grade']) && is_array($data['grade'])) { 
-            $program->grade = implode($data['grade']);
-        } else{
-            $program->grade = $data['grade'];
-        }
-
-        // Carbon : 날짜와 시간을 다루는 라이브러리
-        $rStart = Carbon::createFromFormat('Y-m-d H:i', $data['rStart']); 
-        $rEnd = Carbon::createFromFormat('Y-m-d H:i', $data['rEnd']);
-        $rStart->second(00);
-        $rEnd->second(59);
-
-        $program->rStart = $rStart;
-        $program->rEnd = $rEnd;
-
-        $flag = $program->save();
-
-        if($flag){
-            foreach ($data['depart'] as $value) {
-                $departs = new RecruitDepart;
-                $departs->program = $program->pId;
-                $departs->depart = $value;
-                $departs->save();
-            }
-            
-            foreach ($data['lang'] as $value) {
-                $langs = new RecruitLang;
-                $langs->program = $program->pId;
-                $langs->lang = $value;
-                $langs->save();
-            }
-        } else{
-            return response()->json(
-                [
-                    'data' => $data,
-                    'status'  => false,
-                    'msg' => '학과,언어 등록실패'
-                ],
-                500
-            );
-        }
-    }
-
-    // 정보 확인 공통
-    public function showInfo($item, $pId){
-        $departs = RecruitDepart::where('program', '=', $pId)->get();
-        $langs = RecruitLang::where('program', '=', $pId)->get();
-
-        $info = [
-            'pId' => $item->pId,
-            'category' => $item->category,
-            'title' => $item->title,
-            'grade' => $item->grade,
-            'rStart' => $item->rStart,
-            'rEnd' => $item-> rEnd,
-            'actStart' => $item->actStart,
-            'actEnd' => $item->actEnd,
-            'depart' => $departs,
-            'lang' => $langs
-        ];
-
-        return $info;
-    }
-
-    // 프로그램 목록
-    public function index()
+    // request 배열로 반환
+    public function getRequestData($req)
     {
-        $programs = Program::all();
-        
-        $programList = [];
-        
-        $programs->each(function ($item) use (&$programList){
-            $program = [];
-            
-            $info = $this->showInfo($item, $item->pId);
-            
-            $imageClass = new ImageLogic;
-            $images = $imageClass->showImgs($item->pId, 'program');
-            
-            $program = [
-                'info' => $info,
-                'images' => $images
-            ];
-
-            array_push($programList, $program);
-        });
-
-        return response()->json(
-            [
-                'status'  => true,
-                'programList' => $programList
-            ],
-            200
-        );
-    }
-
-    // 프로그램 등록
-    public function store(Request $req)
-    {
-
-        // return response($req);
-        // $data = $req->all(); // 라라벨에서 자동으로 배열형태로 바꿔준다
-
-        // $data = json_decode($req->input('json'), true);
-
-        $program = new Program;
-
         $data = [
             'category' => $req->category,
             'title' => $req->title,
@@ -143,7 +29,119 @@ class ProgramController extends Controller
             'actEnd' => $req->actEnd
         ];
 
-        var_dump($data);
+        return $data;
+    }
+
+    // 정보 처리
+    public function infoProcess($data, $program)
+    {
+        $program->title = $data['title'];
+        $program->selectNum = $data['selectNum'];
+        $program->actStart = $data['actStart'];
+        $program->actEnd = $data['actEnd'];
+
+        // isset() : $data 안에 grade라는 key가 있는지 확인
+        // is_array() : $data['grade']의 값이 배열인지 확인
+        if (isset($data['grade']) && is_array($data['grade'])) {
+            $program->grade = implode($data['grade']);
+        } else {
+            $program->grade = $data['grade'];
+        }
+
+        // Carbon : 날짜와 시간을 다루는 라이브러리
+        $rStart = Carbon::createFromFormat('Y-m-d H:i', $data['rStart']);
+        $rEnd = Carbon::createFromFormat('Y-m-d H:i', $data['rEnd']);
+        $rStart->second(00);
+        $rEnd->second(59);
+
+        $program->rStart = $rStart;
+        $program->rEnd = $rEnd;
+
+        $flag = $program->save();
+
+        if ($flag) {
+            foreach ($data['depart'] as $value) {
+                $departs = new RecruitDepart;
+                $departs->program = $program->pId;
+                $departs->depart = $value;
+                $departs->save();
+            }
+
+            foreach ($data['lang'] as $value) {
+                $langs = new RecruitLang;
+                $langs->program = $program->pId;
+                $langs->lang = $value;
+                $langs->save();
+            }
+        } else {
+            return response()->json(
+                [
+                    'data' => $data,
+                    'status'  => false,
+                    'msg' => '학과,언어 등록실패'
+                ],
+                500
+            );
+        }
+    }
+
+    // 정보 확인 공통
+    public function showInfo($item, $pId)
+    {
+        $departs = RecruitDepart::where('program', '=', $pId)->get();
+        $langs = RecruitLang::where('program', '=', $pId)->get();
+
+        $info = [
+            'pId' => $item->pId,
+            'category' => $item->category,
+            'title' => $item->title,
+            'grade' => $item->grade,
+            'rStart' => $item->rStart,
+            'rEnd' => $item->rEnd,
+            'actStart' => $item->actStart,
+            'actEnd' => $item->actEnd,
+            'depart' => $departs,
+            'lang' => $langs
+        ];
+
+        return $info;
+    }
+
+    // 프로그램 목록
+    public function index()
+    {
+        $programs = Program::all();
+
+        $programList = [];
+
+        $programs->each(function ($item) use (&$programList) {
+
+            $info = $this->showInfo($item, $item->pId);
+
+            $imageClass = new ImageLogic;
+            $images = $imageClass->showImgs($item->pId, 'program');
+
+            $program = [
+                'info' => $info,
+                'images' => $images
+            ];
+
+            array_push($programList, $program);
+        });
+    }
+
+    // 프로그램 등록
+    public function store(Request $req)
+    {
+
+        // return response($req);
+        // $data = $req->all(); // 라라벨에서 자동으로 배열형태로 바꿔준다
+
+        // $data = json_decode($req->input('json'), true);
+
+        $program = new Program;
+
+        $data = $this->getRequestData($req); // req를 배열로 반환
 
         $program->category = $data['category'];
         $type = $program->category == '한일교류' ? 'A' : 'B';
@@ -155,9 +153,9 @@ class ProgramController extends Controller
             $result = explode('-', $item, 3);
             array_push($uList, $result[2]);
         });
-        
+
         // 중복 확인
-        while(in_array($uuid, $uList)){
+        while (in_array($uuid, $uList)) {
             $uuid = (string)Str::uuid();
         }
 
@@ -165,9 +163,8 @@ class ProgramController extends Controller
 
         $this->infoProcess($data, $program);
 
-        echo "여기까지 도달";
         // 이미지 전달 확인
-        if($req->hasFile('images')){ 
+        if ($req->hasFile('images')) {
             echo "이미지 부분";
             $imgList = $req->file('images');
             $imageClass = new ImageLogic;
@@ -176,7 +173,7 @@ class ProgramController extends Controller
 
         return response()->json(
             [
-                'data' => $data,
+                'data' => $data, // 확인용임, 전달값이 있어야 할까?
                 'status'  => true,
                 'msg' => '등록완료'
             ],
@@ -188,7 +185,7 @@ class ProgramController extends Controller
     public function programInfo(string $pId)
     {
         $program = Program::where('pId', '=', $pId)->first(); // 없으면 null
-        
+
         $info = $this->showInfo($program, $pId);
 
         $imageClass = new ImageLogic;
@@ -201,7 +198,6 @@ class ProgramController extends Controller
 
         if (!$info) {
             return response()->json([
-                'programInfo' => $programInfo,
                 'err' => '해당하는 번호 없음',
             ], 400);
         }
@@ -221,18 +217,7 @@ class ProgramController extends Controller
 
         // $data = $req->all();
         // $data = json_decode($req->input('json'), true);
-        $data = [
-            'category' => $req->category,
-            'title' => $req->title,
-            'grade' => $req->grade,
-            'depart' => $req->depart,
-            'lang' => $req->lang,
-            'selectNum'  => $req->selectNum,
-            'rStart' => $req->rStart,
-            'rEnd' => $req->rEnd,
-            'actStart' => $req->actStart,
-            'actEnd' => $req->actEnd
-        ];
+        $data = $this->getRequestData($req);
 
         $program = Program::find($pId);
         RecruitDepart::where('program', '=', $pId)->delete();
@@ -246,7 +231,7 @@ class ProgramController extends Controller
 
             $this->infoProcess($data, $program);
 
-            if($req->hasFile('images')){ // 이미지 전달 확인
+            if ($req->hasFile('images')) { // 이미지 전달 확인
                 $imgList = $req->file('images');
                 $imageClass->insertImgs($imgList, $program->pId, 'program');
             }
@@ -270,7 +255,7 @@ class ProgramController extends Controller
     // 프로그램 삭제
     public function destroy(string $pId)
     {
-        $cofirm = Program::where('pId', '=', $pId)->delete();
+        $confirm = Program::where('pId', '=', $pId)->delete();
 
         $imageClass = new ImageLogic;
         $imageClass->deleteImgs($pId, 'program');
@@ -281,7 +266,7 @@ class ProgramController extends Controller
         ];
         $status = 200;
 
-        if($cofirm == 0){
+        if ($confirm == 0) {
             $result = [
                 'status'  => true,
                 'msg' => '삭제 실패'
@@ -294,6 +279,4 @@ class ProgramController extends Controller
             $status
         );
     }
-
 }
-
