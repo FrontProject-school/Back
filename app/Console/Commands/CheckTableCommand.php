@@ -33,6 +33,8 @@ class CheckTableCommand extends Command
     public function handle()
     {   
         $value1 = Program::where('rEnd', '<', now())
+                    // 1분 전 시간과 현재 사이의 레코드만 선택
+                    ->where('rEnd', '>', now()->subMinute()) 
                     ->pluck('pId')
                     ->toArray();
 
