@@ -12,6 +12,8 @@ use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\FreeboardController;
 use App\Http\Controllers\NotifyController;
+use App\Http\Controllers\QuestionController;
+use App\Models\Freeboard;
 use PHPUnit\Framework\TestStatus\Notice;
 
 /*
@@ -78,17 +80,22 @@ Route::post('applicant/myApplicants/{stuId}', [ApplicantController::class, 'myAp
 Route::post('applicant/details', [ApplicantController::class, 'details']);
 
 // 게시판
-Route::get('/freeboards', [FreeboardController::class, 'index']);
-Route::post('/freeboards', [FreeboardController::class, 'store']);
-Route::get('/freeboards/{num}', [FreeboardController::class, 'show']);
-Route::put('/freeboards/{num}', [FreeboardController::class, 'update']);
-Route::delete('/freeboards/{num}', [FreeboardController::class, 'destroy']);
+// Route::get('/freeboards', [FreeboardController::class, 'index']);
+// Route::post('/freeboards', [FreeboardController::class, 'store']);
+// Route::get('/freeboards/{num}', [FreeboardController::class, 'show']);
+// Route::put('/freeboards/{num}', [FreeboardController::class, 'update']);
+// Route::delete('/freeboards/{num}', [FreeboardController::class, 'destroy']);
+Route::apiResource('freeboards', FreeboardController::class);
 
 // 공지사항
-Route::get('/notices', [NoticeController::class, 'index']);
-Route::post('/notices', [NoticeController::class, 'store']);
-Route::get('/notices/{num}', [NoticeController::class, 'show']);
-Route::put('/notices/{num}', [NoticeController::class, 'update']);
-Route::delete('/notices/{num}', [NoticeController::class, 'destroy']);
+// Route::get('/notices', [NoticeController::class, 'index']);
+// Route::post('/notices', [NoticeController::class, 'store']);
+// Route::get('/notices/{num}', [NoticeController::class, 'show']);
+// Route::put('/notices/{num}', [NoticeController::class, 'update']);
+// Route::delete('/notices/{num}', [NoticeController::class, 'destroy']);
+Route::apiResource('notices', NoticeController::class);
+
+// 문의글
+Route::apiResource('questions', QuestionController::class);
 
 
