@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('applicants', function (Blueprint $table) {
             $table->id();
             $table->string('stuId')->nullable(false);
-            $table->string('program', 50)->nullable(false);
+            $table->string('program', 100)->nullable(false);
             $table->string('answer', 200)->nullable(false);
             $table->string('selected', 1)->nullable();
             $table->timestamps();

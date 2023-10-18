@@ -4,16 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Applicant;
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ApplicantController extends Controller
 {
     // // 관리자 학생 선발
-    // public function applicantSelection(string $aId){
+    public function applicantSelection(Request $req)
+    {
+        $checkedStdList = $req->all();
 
-    // }
+        $user = Auth::user();
+
+        $result = Admin::find($user->email);
+
+        if ($result) {
+            Applicant::whereIn('stuId', $checkedStdList);
+        }
+    }
 
 
     // 전체 지원목록 확인
@@ -33,7 +44,7 @@ class ApplicantController extends Controller
     // 지원 등록
     public function store(Request $req)
     {
-        
+
         $applicant = new Applicant;
 
         $applicant->stuId = $req->stuId;
@@ -41,9 +52,9 @@ class ApplicantController extends Controller
         $applicant->answer = $req->answer;
 
         $stuIdCheck = count(DB::table('users')->where('stuId', '=', $applicant->stuId)->get()) == 0 ? true : false;
-        
+
         $programCheck = count(DB::table('programs')->where('pId', '=', $applicant->program)->get()) == 0 ? true : false;
-        if($stuIdCheck){
+        if ($stuIdCheck) {
             return response()->json(
                 [
                     'status'  => false,
@@ -53,7 +64,7 @@ class ApplicantController extends Controller
             );
         }
 
-        if($programCheck){
+        if ($programCheck) {
             return response()->json(
                 [
                     'status'  => false,
@@ -65,7 +76,7 @@ class ApplicantController extends Controller
 
 
         $applicant->save();
-        
+
         return response()->json(
             [
                 'status'  => true,
@@ -113,20 +124,21 @@ class ApplicantController extends Controller
     {
         $result = Applicant::where('id', '=', $id)->first();
 
-        if($result){
+        if ($result) {
             $result->update($req->all());
 
             return response()->json(
                 [
                     'msg' => '수정완료',
-                ], 200
+                ],
+                200
             );
-            
-        } else{
+        } else {
             return response()->json(
                 [
                     'err' => '번호가 일치하지 않음',
-                ], 500
+                ],
+                500
             );
         }
     }
