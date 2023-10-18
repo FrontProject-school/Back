@@ -14,6 +14,7 @@ use App\Http\Controllers\FreeboardController;
 use App\Http\Controllers\NotifyController;
 use App\Http\Controllers\QuestionController;
 use App\Models\Freeboard;
+use App\Http\Controllers\SearchController;
 use PHPUnit\Framework\TestStatus\Notice;
 
 /*
@@ -98,4 +99,5 @@ Route::apiResource('notices', NoticeController::class);
 // 문의글
 Route::apiResource('questions', QuestionController::class);
 
-
+// 검색
+Route::post('/search/{boardType}', [SearchController::class,'search']);
