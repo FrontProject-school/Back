@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('content', 1000)->nullable(false);
             $table->string('confirm', 1)->nullable(false);
             $table->timestamps();
+
+            // $table->foreign('adminNum')->references('id')->on('admins')->onUpdate('cascade')->onDelete('cascade');
+
          });
     }
 
