@@ -11,15 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('freeboards', function (Blueprint $table) {
+        Schema::create('questions', function (Blueprint $table) {
+            $table->id('');
             $table->mediumInteger('num')->primary();
-            $table->mediumInteger('imageNum')->nullable();
             $table->string('stdId', 7)->nullable(false);
             $table->string('title', 50)->nullable(false);
-            $table->string('content', 1000)->nullable(false);
+            $table->string('content', 500)->nullable(false);
+            $table->string('answer', 500)->nullable();
+            $table->string('secret', 1)->nullable(false);
             $table->timestamps();
 
-            $table->foreign('stuId')->references('stuId')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('stdId')->references('stuId')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            
         });
     }
 
@@ -28,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('freeboards');
+        Schema::dropIfExists('questions');
     }
 };
