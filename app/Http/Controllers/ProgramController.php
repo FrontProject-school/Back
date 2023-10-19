@@ -40,6 +40,8 @@ class ProgramController extends Controller
         $program->actStart = $data['actStart'];
         $program->actEnd = $data['actEnd'];
 
+        
+
         // isset() : $data 안에 grade라는 key가 있는지 확인
         // is_array() : $data['grade']의 값이 배열인지 확인
         if (isset($data['grade']) && is_array($data['grade'])) {
@@ -56,7 +58,7 @@ class ProgramController extends Controller
 
         $program->rStart = $rStart;
         $program->rEnd = $rEnd;
-
+        var_dump($program);
         $flag = $program->save();
 
         if ($flag) {
@@ -64,13 +66,16 @@ class ProgramController extends Controller
                 $departs = new RecruitDepart;
                 $departs->program = $program->pId;
                 $departs->depart = $value;
+                var_dump($departs);
                 $departs->save();
             }
+
 
             foreach ($data['lang'] as $value) {
                 $langs = new RecruitLang;
                 $langs->program = $program->pId;
                 $langs->lang = $value;
+                var_dump($langs);
                 $langs->save();
             }
         } else {
@@ -149,14 +154,19 @@ class ProgramController extends Controller
         $pIdList = Program::pluck('pId');
         $uList = [];
         $uuid = (string)Str::uuid();
-        $pIdList->each(function ($item) use (&$uList) {
-            $result = explode('-', $item, 3);
-            array_push($uList, $result[2]);
-        });
 
-        // 중복 확인
-        while (in_array($uuid, $uList)) {
-            $uuid = (string)Str::uuid();
+        var_dump($pIdList);
+
+        if(!($pIdList->isEmpty())){
+            $pIdList->each(function ($item) use (&$uList) {
+                $result = explode('-', $item, 3);
+                array_push($uList, $result[2]);
+            });
+    
+            // 중복 확인
+            while (in_array($uuid, $uList)) {
+                $uuid = (string)Str::uuid();
+            }
         }
 
         $program->pId = date('y') . '-' . $type . '-' . $uuid;

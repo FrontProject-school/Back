@@ -79,6 +79,7 @@ Route::apiResource('applicant', ApplicantController::class)->except([
 ]);
 Route::post('applicant/myApplicants/{stuId}', [ApplicantController::class, 'myApplicants']);
 Route::post('applicant/details', [ApplicantController::class, 'details']);
+Route::post('applicant/applicantSelection', [ApplicantController::class, 'applicantSelection']);
 
 // 게시판
 // Route::get('/freeboards', [FreeboardController::class, 'index']);

@@ -17,13 +17,23 @@ class ApplicantController extends Controller
     {
         $checkedStdList = $req->all();
 
-        $user = Auth::user();
+        var_dump($checkedStdList);
 
-        $result = Admin::find($user->email);
-
-        if ($result) {
-            Applicant::whereIn('stuId', $checkedStdList);
+        foreach ($checkedStdList as $item) {
+            Applicant::where([
+                ['stuId', $item->stuId],
+                ['program', $item->program]
+            ])->update(['selected' => 'T']);
         }
+
+        $applicants = Applicant::all();
+
+        return response()->json(
+            [
+                '$applicants' => $applicants
+            ],
+            200
+        );
     }
 
 

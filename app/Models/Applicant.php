@@ -16,6 +16,7 @@ class Applicant extends Model
         'id',
         'stuId',
         'program',
-        'answer'
+        'answer',
+        'selected'
     ];
 }
