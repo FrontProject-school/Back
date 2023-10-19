@@ -58,7 +58,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // 관리자 (등록 / 삭제), 총관리자 변경
     
-    Route::apiResource('/admin', AdminController::class);
+    Route::apiResource('/admin', AdminController::class)->except([
+        'create','edit'
+    ]);
     
 
     // 관리자 권한 확인용 미들웨어
