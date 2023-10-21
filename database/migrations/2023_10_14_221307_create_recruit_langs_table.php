@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('recruit_langs', function (Blueprint $table) {
             $table->id();
-            $table->string('program', 100);
-            $table->string('lang', 100);
+            $table->string('pId');
+            $table->string('lang');
             $table->timestamps();
-            $table->foreign('program')->references('pId')->on('programs')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('pId')->references('pId')->on('programs')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

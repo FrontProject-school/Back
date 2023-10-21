@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('freeboards', function (Blueprint $table) {
-            $table->mediumInteger('num')->primary();
+            $table->id();
             $table->mediumInteger('imageNum')->nullable();
-            $table->string('stdId', 7)->nullable(false);
+            $table->string('studId')->nullable(false);
             $table->string('title', 50)->nullable(false);
             $table->string('content', 1000)->nullable(false);
             $table->timestamps();
 
-            $table->foreign('stuId')->references('stuId')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('studId')->references('studId')->on('users')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

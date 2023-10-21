@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('applicants', function (Blueprint $table) {
             $table->id();
-            $table->string('stuId')->nullable(false);
-            $table->string('program', 100)->nullable(false);
+            $table->string('studId')->nullable(false);
+            $table->string('pId')->nullable(false);
             $table->string('answer', 200)->nullable(false);
             $table->string('selected', 1)->nullable();
             $table->timestamps();
 
-            $table->foreign('stuId')->references('stuId')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreign('program')->references('pId')->on('programs')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('studId')->references('studId')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('pId')->references('pId')->on('programs')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

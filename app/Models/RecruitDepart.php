@@ -10,7 +10,7 @@ class RecruitDepart extends Model
     use HasFactory;
 
     protected $fillable = [
-        'program',
+        'pId',
         'depart'
     ];
 }

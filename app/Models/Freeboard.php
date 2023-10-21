@@ -9,18 +9,18 @@ class Freeboard extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'num';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
-        'num',
+        'id',
         'imageNum',
-        'stdId',
+        'studId',
         'title',
         'content'
     ];
 
     public function getRouteKeyName()
     {
-        return 'num';
+        return 'id';
     }
 }

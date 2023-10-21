@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id();
-            $table->string('category', 100)->nullable(false);
-            $table->string('uId', 100)->nullable(false);
+            $table->string('category')->nullable(false);
+            $table->string('uId')->nullable(false);
             $table->string('imgName')->nullable(false);
             $table->timestamps();
         });

@@ -9,13 +9,9 @@ class Applicant extends Model
 {
     use HasFactory;
 
-    // 기본키 지정
-    // protected $primaryKey = 'num';
-
     protected $fillable = [
-        'id',
-        'stuId',
-        'program',
+        'studId',
+        'pId',
         'answer',
         'selected'
     ];

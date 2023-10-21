@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('notifies', function (Blueprint $table) {
             $table->id();
-            $table->string('stuId');
+            $table->string('studId');
             $table->string('check',1)->default('N');
-            $table->string('pId', 100);
+            $table->string('pId');
             $table->timestamps();
 
-            $table->foreign('stuId')->references('stuId')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('studId')->references('studId')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('pId')->references('pId')->on('programs')->onUpdate('cascade')->onDelete('cascade');
         });
     }

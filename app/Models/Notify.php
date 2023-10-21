@@ -11,7 +11,7 @@ class Notify extends Model
 
     protected $fillable = [
         'id',
-        'stuId',
+        'studId',
         'check',
         'pId'
     ];

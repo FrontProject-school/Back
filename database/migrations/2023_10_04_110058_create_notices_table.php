@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('notices', function (Blueprint $table) {
-            $table->mediumInteger('num')->primary();
-            $table->tinyInteger('adminNum')->nullable();
+            $table->id();
+            $table->unsignedBigInteger('adminId')->nullable();
             $table->string('title', 50)->nullable(false);
             $table->string('content', 1000)->nullable(false);
             $table->string('confirm', 1)->nullable(false);

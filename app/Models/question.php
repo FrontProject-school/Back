@@ -9,11 +9,11 @@ class question extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'num';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
-        'num',
-        'stdId',
+        'id',
+        'studId',
         'title',
         'content',
         'answer',

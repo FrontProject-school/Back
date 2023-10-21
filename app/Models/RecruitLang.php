@@ -10,7 +10,7 @@ class RecruitLang extends Model
     use HasFactory;
 
     protected $fillable = [
-        'program',
+        'pId',
         'lang'
     ];
 }

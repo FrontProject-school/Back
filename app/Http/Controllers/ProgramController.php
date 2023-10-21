@@ -64,7 +64,7 @@ class ProgramController extends Controller
         if ($flag) {
             foreach ($data['depart'] as $value) {
                 $departs = new RecruitDepart;
-                $departs->program = $program->pId;
+                $departs->pId = $program->pId;
                 $departs->depart = $value;
                 var_dump($departs);
                 $departs->save();
@@ -73,7 +73,7 @@ class ProgramController extends Controller
 
             foreach ($data['lang'] as $value) {
                 $langs = new RecruitLang;
-                $langs->program = $program->pId;
+                $langs->pId = $program->pId;
                 $langs->lang = $value;
                 var_dump($langs);
                 $langs->save();
@@ -93,8 +93,8 @@ class ProgramController extends Controller
     // 정보 확인 공통
     public function showInfo($item, $pId)
     {
-        $departs = RecruitDepart::where('program', '=', $pId)->get();
-        $langs = RecruitLang::where('program', '=', $pId)->get();
+        $departs = RecruitDepart::where('pId', '=', $pId)->get();
+        $langs = RecruitLang::where('pId', '=', $pId)->get();
 
         $info = [
             'pId' => $item->pId,
@@ -230,8 +230,8 @@ class ProgramController extends Controller
         $data = $this->getRequestData($req);
 
         $program = Program::find($pId);
-        RecruitDepart::where('program', '=', $pId)->delete();
-        RecruitLang::where('program', '=', $pId)->delete();
+        RecruitDepart::where('pId', '=', $pId)->delete();
+        RecruitLang::where('pId', '=', $pId)->delete();
 
         $imageClass = new ImageLogic;
         $imageClass->deleteImgs($pId, 'program');

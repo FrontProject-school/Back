@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('recruit_departs', function (Blueprint $table) {
             $table->id();
-            $table->string('program', 100)->nullable(false);
-            $table->string('depart', 100)->nullable(false);
+            $table->string('pId')->nullable(false);
+            $table->string('depart')->nullable(false);
             $table->timestamps();
-            $table->foreign('program')->references('pId')->on('programs')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('pId')->references('pId')->on('programs')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

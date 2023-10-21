@@ -21,8 +21,8 @@ class ApplicantController extends Controller
 
         foreach ($checkedStdList as $item) {
             Applicant::where([
-                ['stuId', $item->stuId],
-                ['program', $item->program]
+                ['studId', $item->studId],
+                ['pId', $item->pId]
             ])->update(['selected' => 'T']);
         }
 
@@ -57,14 +57,14 @@ class ApplicantController extends Controller
 
         $applicant = new Applicant;
 
-        $applicant->stuId = $req->stuId;
-        $applicant->program = $req->program;
+        $applicant->studId = $req->studId;
+        $applicant->pId = $req->pId;
         $applicant->answer = $req->answer;
 
-        $stuIdCheck = count(DB::table('users')->where('stuId', '=', $applicant->stuId)->get()) == 0 ? true : false;
+        $studIdCheck = count(DB::table('users')->where('studId', '=', $applicant->studId)->get()) == 0 ? true : false;
 
-        $programCheck = count(DB::table('programs')->where('pId', '=', $applicant->program)->get()) == 0 ? true : false;
-        if ($stuIdCheck) {
+        $programCheck = count(DB::table('programs')->where('pId', '=', $applicant->pId)->get()) == 0 ? true : false;
+        if ($studIdCheck) {
             return response()->json(
                 [
                     'status'  => false,
@@ -97,9 +97,9 @@ class ApplicantController extends Controller
     }
 
     // 학생별 지원 목록
-    public function myApplicants(string $stuId)
+    public function myApplicants(string $studId)
     {
-        $info = Applicant::where('stuId', '=', $stuId)->get(); // 없으면 빈 배열
+        $info = Applicant::where('studId', '=', $studId)->get(); // 없으면 빈 배열
 
         return response()->json(
             [
@@ -116,8 +116,8 @@ class ApplicantController extends Controller
         $data = json_decode($req->getContent());
 
         $result = Applicant::where([
-            ['stuId', '=', $data->stuId],
-            ['program', '=', $data->program]
+            ['studId', '=', $data->studId],
+            ['pId', '=', $data->pId]
         ])->get();
 
         return response()->json(

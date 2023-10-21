@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id('');
             $table->mediumInteger('num')->primary();
-            $table->string('stdId', 7)->nullable(false);
+            $table->string('studId')->nullable(false);
             $table->string('title', 50)->nullable(false);
             $table->string('content', 500)->nullable(false);
             $table->string('answer', 500)->nullable();
             $table->string('secret', 1)->nullable(false);
             $table->timestamps();
 
-            $table->foreign('stdId')->references('stuId')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('studId')->references('studId')->on('users')->onUpdate('cascade')->onDelete('cascade');
             
         });
     }
