@@ -51,7 +51,6 @@ class Admin extends Authenticatable
             if($this->position === 'general_admin') {
                 return response()->json([
                     'status' => true,
-                    // 'message' => '총관리자 확인되었습니다.',
                     'role' => $this->position,
                 ]);
             }
@@ -60,7 +59,6 @@ class Admin extends Authenticatable
             {
                 return response()->json([
                     'status' => true,
-                    // 'message' => '관리자 확인되었습니다.',
                     'role' => $this->position,
                 ]);
             }

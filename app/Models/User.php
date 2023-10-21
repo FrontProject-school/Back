@@ -52,7 +52,6 @@ class User extends Authenticatable
 
     // 사용자 권한 확인
     public function hasRole($role) {
-        // 유저거나 깡패 시
         return $this->position === $role;
     }
 }
