@@ -141,6 +141,7 @@ class AdminController extends Controller
         // 권한이 없는 관리자가 변경하려 할 시
         if(!$check=="general_admin"){
             return response()->json([
+                "status" => false,
                 'message' => '총 관리자가 아닙니다.',
             ]);
         }
