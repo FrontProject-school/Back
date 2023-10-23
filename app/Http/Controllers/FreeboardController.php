@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Freeboard;
+use App\Http\Logics\ImageLogic;
 
 
 class FreeboardController extends Controller
@@ -38,6 +39,12 @@ class FreeboardController extends Controller
         $freeboard->imageNum = $request->imageNum;
         $freeboard->title = $request->title;
         $freeboard->content = $request->content;
+
+        if ($request->hasFile('images')) {
+            $imgList = $request->file('images');
+            $imageClass = new ImageLogic;
+            $imageClass->insertImgs($imgList, $freeboard->Id, 'freeboard');
+        }
 
         $freeboard->save();
 
@@ -81,7 +88,6 @@ class FreeboardController extends Controller
 
         // 요청에서 받은 데이터로 게시글 업데이트
         $freeboard->stdId = $request->stdId;
-        $freeboard->imageNum = $request->imageNum;
         $freeboard->title = $request->title;
         $freeboard->content = $request->content;
 
