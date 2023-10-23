@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\question;
 use Illuminate\Http\Request;
 
-class QuestionController extends Controller{   
+class QuestionController extends Controller{
     private $question;
 
     public function __construct(Question $question) {
@@ -51,9 +51,9 @@ class QuestionController extends Controller{
     // 상세 페이지
     public function show(Question $question){
         // show 에 경우는 해당 페이지의 모델 값이 파라미터로 넘어옴
-        $content = Question::where('num', '=', $question->num)->first();
+        $question = Question::where('id', '=', $question->id)->first();
 
-        if (!$content) {
+        if (!$question) {
             return response()->json([
                 'err'=>'현재 존재하지 않는 문의글 입니다.'
             ],
@@ -61,9 +61,9 @@ class QuestionController extends Controller{
         }
 
         return response()->json([
-            'content'=>$content
+            'question'=>$questions
         ],
-        200);    
+        200);
     }
 
     public function edit(Question $question){

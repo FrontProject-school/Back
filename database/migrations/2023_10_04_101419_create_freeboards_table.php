@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('content', 1000)->nullable(false);
             $table->timestamps();
 
-            $table->foreign('studId')->references('studId')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('studId')->references('studId')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

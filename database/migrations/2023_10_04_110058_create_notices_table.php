@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('confirm', 1)->nullable(false);
             $table->timestamps();
 
-            // $table->foreign('adminNum')->references('id')->on('admins')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('adminId')->references('id')->on('admins')->cascadeOnUpdate()->cascadeOnDelete();
 
          });
     }

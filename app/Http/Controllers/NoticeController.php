@@ -38,6 +38,12 @@ class NoticeController extends Controller
         $notice->content = $request->content;
         $notice->confirm = $request->confirm;
 
+        if ($request->hasFile('images')) {
+            $imgList = $request->file('images');
+            $imageClass = new ImageLogic;
+            $imageClass->insertImgs($imgList, $notice->id, 'notice');
+        }
+
         $notice->save();
 
         return response()->json(
@@ -49,10 +55,13 @@ class NoticeController extends Controller
         );
     }
 
-    public function show($num) {
-        $content = Notice::where('num', '=', $num)->first();
+    public function show($id) {
+        $notice = Notice::where('id', $id)->first();
 
-        if (!$content) {
+        $imageClass = new ImageLogic;
+        $images = $imageClass->showImgs($id, 'notice');
+
+        if (!$notice) {
             return response()->json([
                 'err'=>'현재 존재하지 않는 공지사항입니다.'
             ],
@@ -60,7 +69,8 @@ class NoticeController extends Controller
         }
 
         return response()->json([
-            'content'=>$content
+            'notice'=>$notice,
+            'images'=>$images
         ],
         200);
     }
@@ -69,8 +79,8 @@ class NoticeController extends Controller
         //
     }
 
-    public function update(Request $request, $num) {
-        $notice = Notice::where('num','=',$num)->first();
+    public function update(Request $request, $id) {
+        $notice = Notice::where('id', $id)->first();
 
         if(!$notice) {
             return response()->json([
@@ -79,21 +89,32 @@ class NoticeController extends Controller
         }
 
         // 요청에서 받은 데이터로 게시글 업데이트
-        $notice->adminNum = $request->adminNum;
-        $notice->title = $request->title;
-        $notice->content = $request->content;
-        $notice->confirm = $request->confirm;
+        // $notice->adminNum = $request->adminNum;
+        // $notice->title = $request->title;
+        // $notice->content = $request->content;
+        // $notice->confirm = $request->confirm;
 
-        // $notice->update($request->all()); // 하단 코드 대체용
-        $notice->save();
+        $imageClass = new ImageLogic;
+        $imageClass->deleteImgs($id, 'notice');
+
+        if ($request->hasFile('images')) {
+            $imgList = $request->file('images');
+            $imageClass->insertImgs($imgList, $notice->id, 'notice');
+        }
+
+        $notice->update($request->all());
+        //$notice->save();
 
         return response()->json([
             'status' => true,
             'msg' => '공지사항이 수정되었습니다.'
         ], 200);
     }
-    public function destroy($num) {
-        $notice = Notice::where('num', '=', $num)->first();
+    public function destroy($id) {
+        $notice = Notice::where('id', $id)->first();
+
+        $imageClass = new ImageLogic;
+        $imageClass->deleteImgs($id, 'notice');
 
         if (!$notice) {
             return response()->json([
