@@ -19,4 +19,9 @@ class question extends Model
         'answer',
         'secret'
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'id';
+    }
 }

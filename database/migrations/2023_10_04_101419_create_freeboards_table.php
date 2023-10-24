@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('freeboards', function (Blueprint $table) {
             $table->id();
-            $table->mediumInteger('imageNum')->nullable();
             $table->string('studId')->nullable(false);
             $table->string('title', 50)->nullable(false);
             $table->string('content', 1000)->nullable(false);
             $table->timestamps();
 
-            $table->foreign('studId')->references('studId')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('studId')->references('studId')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

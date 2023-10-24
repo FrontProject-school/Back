@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Freeboard;
+use App\Http\Logics\ImageLogic;
 
 
 class FreeboardController extends Controller
@@ -35,9 +36,14 @@ class FreeboardController extends Controller
 
         $freeboard->num = count(Freeboard::all()) + 1;
         $freeboard->stdId = $request->stdId;
-        $freeboard->imageNum = $request->imageNum;
         $freeboard->title = $request->title;
         $freeboard->content = $request->content;
+
+        if ($request->hasFile('images')) {
+            $imgList = $request->file('images');
+            $imageClass = new ImageLogic;
+            $imageClass->insertImgs($imgList, $freeboard->id, 'freeboard');
+        }
 
         $freeboard->save();
 
@@ -50,10 +56,13 @@ class FreeboardController extends Controller
         );
     }
 
-    public function show($num) {
-        $content = Freeboard::where('num', '=', $num)->first();
+    public function show($id) {
+        $freeboard = Freeboard::where('id', $id)->first();
 
-        if (!$content) {
+        $imageClass = new ImageLogic;
+        $images = $imageClass->showImgs($id, 'freeboard');
+
+        if (!$freeboard) {
             return response()->json([
                 'err'=>'현재 존재하지 않는 게시글 입니다.'
             ],
@@ -61,7 +70,8 @@ class FreeboardController extends Controller
         }
 
         return response()->json([
-            'content'=>$content
+            'freeboard'=>$freeboard,
+            'images'=>$images
         ],
         200);
     }
@@ -70,8 +80,8 @@ class FreeboardController extends Controller
         //
     }
 
-    public function update(Request $request, $num) {
-        $freeboard = Freeboard::where('num', '=', $num)->first();
+    public function update(Request $request, $id) {
+        $freeboard = Freeboard::where('id', $id)->first();
 
         if (!$freeboard) {
             return response()->json([
@@ -79,21 +89,27 @@ class FreeboardController extends Controller
             ], 404);
         }
 
-        // 요청에서 받은 데이터로 게시글 업데이트
-        $freeboard->stdId = $request->stdId;
-        $freeboard->imageNum = $request->imageNum;
-        $freeboard->title = $request->title;
-        $freeboard->content = $request->content;
+        $imageClass = new ImageLogic;
+        $imageClass->deleteImgs($id, 'freeboard');
 
-        $freeboard->save();
+        if ($request->hasFile('images')) {
+            $imgList = $request->file('images');
+            $imageClass->insertImgs($imgList, $freeboard->Id, 'freeboard');
+        }
+
+        $freeboard->update($request->all());
 
         return response()->json([
             'status' => true,
             'msg' => '게시글이 수정되었습니다.'
         ], 200);
     }
-    public function destroy($num) {
-        $freeboard = Freeboard::where('num', '=', $num)->first();
+
+    public function destroy($id) {
+        $freeboard = Freeboard::where('id', $id)->first();
+
+        $imageClass = new ImageLogic;
+        $imageClass->deleteImgs($id, 'freeboard');
 
         if (!$freeboard) {
             return response()->json([
