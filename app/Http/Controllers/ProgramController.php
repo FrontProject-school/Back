@@ -133,6 +133,15 @@ class ProgramController extends Controller
 
             array_push($programList, $program);
         });
+
+        return response()->json(
+            [
+                'programList' => $programList, // 확인용임, 전달값이 있어야 할까?
+                'status'  => true,
+                'msg' => '불러오기'
+            ],
+            200
+        );
     }
 
     // 프로그램 등록

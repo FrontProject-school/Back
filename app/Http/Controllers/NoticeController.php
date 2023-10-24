@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Logics\ImageLogic;
 use Illuminate\Http\Request;
 use App\Models\notice;
 
