@@ -61,7 +61,7 @@ class QuestionController extends Controller{
         }
 
         return response()->json([
-            'question'=>$questions
+            'question'=> $question
         ],
         200);
     }

@@ -60,11 +60,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     
 
     // 관리자 (등록 / 삭제), 총관리자 변경
-    
     Route::apiResource('/admin', AdminController::class)->except([
         'create','edit'
     ]);
-    
 
     // 관리자 권한 확인용 미들웨어
     Route::middleware(['role:admin'])->group(function() {
@@ -87,19 +85,9 @@ Route::post('applicant/details', [ApplicantController::class, 'details']);
 Route::post('applicant/applicantSelection', [ApplicantController::class, 'applicantSelection']);
 
 // 게시판
-// Route::get('/freeboards', [FreeboardController::class, 'index']);
-// Route::post('/freeboards', [FreeboardController::class, 'store']);
-// Route::get('/freeboards/{num}', [FreeboardController::class, 'show']);
-// Route::put('/freeboards/{num}', [FreeboardController::class, 'update']);
-// Route::delete('/freeboards/{num}', [FreeboardController::class, 'destroy']);
 Route::apiResource('freeboards', FreeboardController::class);
 
 // 공지사항
-// Route::get('/notices', [NoticeController::class, 'index']);
-// Route::post('/notices', [NoticeController::class, 'store']);
-// Route::get('/notices/{num}', [NoticeController::class, 'show']);
-// Route::put('/notices/{num}', [NoticeController::class, 'update']);
-// Route::delete('/notices/{num}', [NoticeController::class, 'destroy']);
 Route::apiResource('notices', NoticeController::class);
 
 // 문의글
