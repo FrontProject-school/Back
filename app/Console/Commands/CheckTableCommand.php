@@ -38,14 +38,14 @@ class CheckTableCommand extends Command
                     ->pluck('pId')
                     ->toArray();
 
-        $value2 = Applicant::whereIn('program',$value1)
+        $value2 = Applicant::whereIn('pId',$value1)
                     ->where('selected', 'T')
-                    ->get(['stuId', 'program']);
+                    ->get(['studId', 'pId']);
         
         foreach ($value2 as $item) {
             Notify::firstOrCreate([         // firstOrCreate 메서드는 동일 값 존재시 pass 해줌
-                'stuId' => $item['stuId'],
-                'pId' => $item['program'],
+                'studId' => $item['studId'],
+                'pId' => $item['pId'],
             ]);
         }            
 
