@@ -30,8 +30,8 @@ class QuestionController extends Controller{
 
     public function store(Request $request){
         $question = new Question;
-        $question->num = count(Question::all()) + 1;
-        $question->stdId = $request->stdId;
+        $question->id = count(Question::all()) + 1;
+        $question->studId = $request->studId;
         $question->title = $request->title;
         $question->content = $request->content;
         $question->secret = $request->secret;
@@ -71,7 +71,7 @@ class QuestionController extends Controller{
     }
 
     public function update(Request $request, Question $question){
-        $question = Question::where('num', '=', $question->num)->first();
+        $question = Question::where('id', '=', $question->id)->first();
 
         if ($question->answer != $request->answer) {
             $question->update($request->answer);
@@ -98,7 +98,7 @@ class QuestionController extends Controller{
     }
 
     public function destroy(Question $question){
-        $question = Question::where('num', '=', $question->num)->first();
+        $question = Question::where('id', '=', $question->id)->first();
 
         if (!$question) {
             return response()->json([
