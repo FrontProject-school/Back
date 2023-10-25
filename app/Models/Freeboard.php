@@ -13,7 +13,6 @@ class Freeboard extends Model
 
     protected $fillable = [
         'id',
-        'imageNum',
         'studId',
         'title',
         'content'

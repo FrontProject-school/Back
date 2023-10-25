@@ -34,18 +34,19 @@ class FreeboardController extends Controller
     public function store(Request $request) {
         $freeboard = new Freeboard;
 
-        $freeboard->num = count(Freeboard::all()) + 1;
-        $freeboard->stdId = $request->stdId;
+        $freeboard->studId = $request->studId;
         $freeboard->title = $request->title;
         $freeboard->content = $request->content;
+        
+        
+
+        $freeboard->save();
 
         if ($request->hasFile('images')) {
             $imgList = $request->file('images');
             $imageClass = new ImageLogic;
-            $imageClass->insertImgs($imgList, $freeboard->id, 'freeboard');
+            $imageClass->insertImgs($imgList, (String)$freeboard->id, 'freeboard');
         }
-
-        $freeboard->save();
 
         return response()->json(
             [

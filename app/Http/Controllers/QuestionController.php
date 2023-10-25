@@ -72,9 +72,16 @@ class QuestionController extends Controller{
 
     public function update(Request $request, Question $question){
         $question = Question::where('id', '=', $question->id)->first();
-
+        // return response()->json([
+            // "ques" => $question->answer,
+            // "req"=>$request->answer
+        //     "sta"=>($question->answer != $request->answer)
+        // ]);
         if ($question->answer != $request->answer) {
-            $question->update($request->answer);
+
+            // dd($question->answer);
+
+            $question->update([$request->answer]);
 
             return response()->json([
                 'status' => true,
