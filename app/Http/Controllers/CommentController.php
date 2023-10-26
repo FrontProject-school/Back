@@ -14,6 +14,7 @@ class CommentController extends Controller
 
     public function __construct(Comment $comment) {
         $this->comment = $comment;
+        $this->middleware('auth')->except('index');
     }
 
     public function index() {
@@ -28,10 +29,10 @@ class CommentController extends Controller
         // 유효성 검사
         $validator = Validator::make(request()->all(), [
             'parent_id' => 'required',
-            'commentStory' => 'required|max:255'
+            'commentStory' => 'required'
         ]);
         if($validator->fails()){
-            return redirect()->back();
+            return redirect();
         }
         else{
             Comment::create([
@@ -53,7 +54,24 @@ class CommentController extends Controller
     }
 
     public function update(Request $request, $id) {
-       //
+        $comment = Comment::where([['category',request()->category], ['uId', $request->id]]);
+
+        if ($comment) {
+            $validator = Validator::make(request()->all(), [
+                'parent_id' => 'required',
+                'commentStory' => 'required'
+            ]);
+            if($validator->fails()){
+                return redirect();
+            }
+            else{
+                Comment::updated([
+                    'category' => request()->category,
+                    'content' => request()->content
+                ]);
+                return redirect();
+            }
+        }
     }
 
     public function destroy($id) {
