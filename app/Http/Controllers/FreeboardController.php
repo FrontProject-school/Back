@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Freeboard;
 use App\Http\Logics\ImageLogic;
 use App\Models\Comment;
+use App\Models\User;
 
 
 class FreeboardController extends Controller
@@ -35,12 +36,18 @@ class FreeboardController extends Controller
     public function store(Request $request) {
         $freeboard = new Freeboard;
 
-        $freeboard->studId = $request->studId;
+        // 관리자? 유저?
+        if(auth()->user()->position){
+            $freeboard->studId = User::where('email', auth()->user()->email)->value('studId');
+        } else {
+            $freeboard->studId = auth()->user()->studId;
+        }
+
         $freeboard->title = $request->title;
         $freeboard->content = $request->content;
         
         $freeboard->save();
-
+        
         if ($request->hasFile('images')) {
             $imgList = $request->file('images');
             $imageClass = new ImageLogic;

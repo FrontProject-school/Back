@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\question;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class QuestionController extends Controller{
     private $question;
@@ -31,7 +32,12 @@ class QuestionController extends Controller{
     public function store(Request $request){
         $question = new Question;
         $question->id = count(Question::all()) + 1;
-        $question->studId = $request->studId;
+        if(auth()->user()->position){
+            // return 'hi';
+            $question->studId = User::where('email', auth()->user()->email)->value('studId');
+        } else {
+            $question->studId = auth()->user()->studId;
+        }
         $question->title = $request->title;
         $question->content = $request->content;
         $question->secret = $request->secret;
