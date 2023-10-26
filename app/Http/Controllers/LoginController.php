@@ -25,21 +25,19 @@ class LoginController extends Controller
         } else {
             // Admin 유저인지 확인 
             $admin = Admin::where('email', $request->email)->first();
-            
             // Admin 일 경우 반환 값
             if($admin) {
                 auth()->guard('admin')->login($admin);
-                $token = $admin->createToken($admin->name);
-              
+                $token = $admin->createToken($admin->name,($admin->position === 'admin' ?['admin']:['general_admin']))->plainTextToken;
+                
                 return response()->json([
-                    'token' =>$token->plainTextToken,
+                    'token' =>$token,
                     'message' => '관리자 로그인 완료!', 
                 ], 200);
             } 
 
             // 일반 유저일 경우 
-            auth()->user();
-            $token = $user->createToken($user->name);
+            $token = $user->createToken($user->name,['user']);
 
             return response()->json([
                 'token' => $token->plainTextToken, 
@@ -80,5 +78,15 @@ class LoginController extends Controller
                 'message'=> '로그아웃 실패: 사용자가 로그인되어 있지 않습니다.',
             ], 401);
         }   
+    }
+
+    public function check(Request $request){
+        $data = auth()->user();
+
+        return response()->json([
+            'state' => true,
+            'message'=> '넌 강해졌다 얼른',
+            'data' => $data,
+        ], 401);
     }
 }

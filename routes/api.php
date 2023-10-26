@@ -53,6 +53,13 @@ Route::middleware('cors')->group(function(){
             Route::get('/list',[UserController::class, 'getUserList'])
             ->middleware('role:admin');
         });
+        
+        Route::middleware(['can:only-general-admin'])->group(function () {
+            // 이 안의 라우트들은 general_admin 역할을 가진 사용자만 접근 가능
+        });
+        Route::middleware(['auth:sanctum', 'can:admin-or-general-admin'])->group(function () {
+            // 이 안의 라우트들은 admin 또는 general_admin 역할을 가진 사용자만 접근 가능
+        });
 
         // 관리자, 유저 로그아웃 통합 
         Route::post('/logout', [LoginController::class, 'logout']);
