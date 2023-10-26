@@ -20,7 +20,7 @@ class AdminController extends Controller
 
         return response()->json([
             'status' => true,
-            'admin list' => $admin,
+            'admin' => $admin,
         ]);
     }
 
