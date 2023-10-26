@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('/notify', NotifyController::class)->except([
         'create', 'show', 'edit'
     ]);
+
     // 회원 정보 (받기 / 수정 / 삭제)
     Route::prefix('user')->group(function () {
         // 받기
@@ -57,14 +58,18 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // 관리자, 유저 로그아웃 통합 
     Route::post('/logout', [LoginController::class, 'logout']);
 
+    // 게시판
+    Route::apiResource('freeboards', FreeboardController::class)
+        ->except(['index','show']);
+
+
     // 관리자 권한 확인용 미들웨어
     Route::middleware(['role:admin'])->group(function() {
         // 여기에 관리자용 api 담아주시면 됩니다..
         
         // 관리자 (등록 / 삭제), 총관리자 변경
-        Route::apiResource('/admin', AdminController::class)->except([
-            'create','edit'
-        ]);
+        Route::apiResource('/admin', AdminController::class)
+            ->except(['create','edit']);
 
         // 프로그램 (토큰 o 작업)
         Route::apiResource('program', ProgramController::class)->except([
@@ -72,7 +77,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         ]);
     });
 });
-
 
 // 프로그램 (토큰 x 작업)
 Route::post('program/programInfo/{pId}', [ProgramController::class, 'programInfo']);
@@ -87,7 +91,8 @@ Route::post('applicant/details', [ApplicantController::class, 'details']);
 Route::post('applicant/applicantSelection', [ApplicantController::class, 'applicantSelection']);
 
 // 게시판
-Route::apiResource('freeboards', FreeboardController::class);
+Route::apiResource('freeboards', FreeboardController::class)
+    ->only(['index','show']);
 
 // 공지사항
 Route::apiResource('notices', NoticeController::class);

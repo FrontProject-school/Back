@@ -38,8 +38,6 @@ class FreeboardController extends Controller
         $freeboard->title = $request->title;
         $freeboard->content = $request->content;
         
-        
-
         $freeboard->save();
 
         if ($request->hasFile('images')) {

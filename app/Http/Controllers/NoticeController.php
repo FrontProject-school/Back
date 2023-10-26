@@ -39,13 +39,13 @@ class NoticeController extends Controller
         $notice->content = $request->content;
         $notice->confirm = $request->confirm;
 
+        $notice->save();
+
         if ($request->hasFile('images')) {
             $imgList = $request->file('images');
             $imageClass = new ImageLogic;
-            $imageClass->insertImgs($imgList, $notice->id, 'notice');
+            $imageClass->insertImgs($imgList, (String)$notice->id, 'notice');
         }
-
-        $notice->save();
 
         return response()->json(
             [
