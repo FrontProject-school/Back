@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('content')->nullable(false);
             $table->timestamps();
 
-            $table->foreign('uName')->references('Name')->on('users');
+            $table->foreign('uName')->references('name')->on('users');
         });
     }
 
