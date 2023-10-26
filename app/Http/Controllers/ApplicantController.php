@@ -5,24 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\Applicant;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\ApplicantAnswer;
+use App\Models\Program;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
-class ApplicantController extends Controller
-{
+class ApplicantController extends Controller {
+
+
+
     // // 관리자 학생 선발
     public function applicantSelection(Request $req)
     {
         $checkedStdList = $req->all();
 
-        var_dump($checkedStdList);
-
         foreach ($checkedStdList as $item) {
             Applicant::where([
-                ['studId', $item->studId],
-                ['pId', $item->pId]
+                ['studId', '=', $item->studId],
+                ['pId', '=', $item->pId]
             ])->update(['selected' => 'T']);
         }
 
@@ -57,13 +57,10 @@ class ApplicantController extends Controller
 
         $applicant = new Applicant;
 
-        $applicant->studId = $req->studId;
-        $applicant->pId = $req->pId;
-        $applicant->answer = $req->answer;
+        $studIdCheck = count(User::where('studId', $req->studId)->get()) == 0 ? true : false;
 
-        $studIdCheck = count(DB::table('users')->where('studId', '=', $applicant->studId)->get()) == 0 ? true : false;
+        $programCheck = count(Program::where('pId', $req->pId)->get()) == 0 ? true : false;
 
-        $programCheck = count(DB::table('programs')->where('pId', '=', $applicant->pId)->get()) == 0 ? true : false;
         if ($studIdCheck) {
             return response()->json(
                 [
@@ -84,6 +81,20 @@ class ApplicantController extends Controller
             );
         }
 
+        
+        $applicant->studId = $req->studId;
+        $applicant->pId = $req->pId;
+        $applicant->selected = 'F';
+        
+        // 답변 등록
+        foreach ($req->answer as $index => $value) {
+            $applicantAnswer = new ApplicantAnswer;
+            $applicantAnswer->pId = $req->pId;
+            $applicantAnswer->studId = $req->studId;
+            $applicantAnswer->aNumberr = $index+1;
+            $applicantAnswer->answer = $value;
+            $applicantAnswer->save();
+        }
 
         $applicant->save();
 
@@ -99,7 +110,7 @@ class ApplicantController extends Controller
     // 학생별 지원 목록
     public function myApplicants(string $studId)
     {
-        $info = Applicant::where('studId', '=', $studId)->get(); // 없으면 빈 배열
+        $info = Applicant::where('studId', $studId)->get(); // 없으면 빈 배열
 
         return response()->json(
             [
@@ -115,10 +126,20 @@ class ApplicantController extends Controller
     {
         $data = json_decode($req->getContent());
 
-        $result = Applicant::where([
+        $info = Applicant::where([
             ['studId', '=', $data->studId],
             ['pId', '=', $data->pId]
         ])->get();
+
+        $answer = ApplicantAnswer::where([
+            ['studId', '=', $data->studId],
+            ['pId', '=', $data->pId]
+        ])->get();
+
+        $result = [
+            'info' => $info,
+            'answer' => $answer
+        ];
 
         return response()->json(
             [
@@ -132,10 +153,25 @@ class ApplicantController extends Controller
     // 지원 수정
     public function update(Request $req, string $id)
     {
-        $result = Applicant::where('id', '=', $id)->first();
+        $result = Applicant::where($id)->first();
+
 
         if ($result) {
             $result->update($req->all());
+            
+            ApplicantAnswer::where([
+                ['studId', '=', $req->studId],
+                ['pId', '=', $req->pId]
+            ])->delete();
+
+            foreach ($req->answer as $index => $value) {
+                $applicantAnswer = new ApplicantAnswer;
+                $applicantAnswer->pId = $req->pId;
+                $applicantAnswer->studId = $req->studId;
+                $applicantAnswer->aNumberr = $index+1;
+                $applicantAnswer->answer = $value;
+                $applicantAnswer->save();
+            }
 
             return response()->json(
                 [
@@ -156,7 +192,14 @@ class ApplicantController extends Controller
     // 지원 삭제
     public function destroy(string $id)
     {
-        Applicant::where('id', '=', $id)->delete();
+        $applicant = Applicant::where($id)->first();
+
+        ApplicantAnswer::where([
+            ['studId', '=', $applicant->studId],
+            ['pId', '=', $applicant->pId]
+        ])->delete();
+
+        Applicant::where($id)->delete();
         return response()->json(
             [
                 'status'  => true,

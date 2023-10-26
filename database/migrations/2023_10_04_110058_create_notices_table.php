@@ -21,7 +21,7 @@ return new class extends Migration
 
             $table->foreign('adminId')->references('id')->on('admins')->cascadeOnUpdate()->cascadeOnDelete();
 
-         });
+        });
     }
 
     /**

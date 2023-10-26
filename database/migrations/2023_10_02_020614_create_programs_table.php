@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('programs', function (Blueprint $table) {
             $table->string('pId')->primary();
-            $table->string('category')->nullable(false);
-            $table->string('title')->nullable(false);
-            $table->smallInteger('selectNum')->nullable(false);
-            $table->string('grade')->nullable(false);
-            $table->datetime('rStart')->nullable(false);
-            $table->datetime('rEnd')->nullable(false);
-            $table->date('actStart')->nullable(false);
-            $table->date('actEnd')->nullable(false);
+            $table->string('category');
+            $table->string('title');
+            $table->smallInteger('selectNum');
+            $table->string('grade');
+            $table->datetime('rStart');
+            $table->datetime('rEnd');
+            $table->date('actStart');
+            $table->date('actEnd');
             $table->timestamps();
         });
     }

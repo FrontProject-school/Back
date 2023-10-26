@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('applicants', function (Blueprint $table) {
+        Schema::create('recruit_questions', function (Blueprint $table) {
             $table->id();
-            $table->string('studId');
             $table->string('pId');
-            $table->string('selected', 1);
+            $table->tinyInteger('qNumber');
+            $table->string('question');
             $table->timestamps();
 
-            $table->foreign('studId')->references('studId')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('pId')->references('pId')->on('programs')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('applicants');
+        Schema::dropIfExists('recruit_questions');
     }
 };

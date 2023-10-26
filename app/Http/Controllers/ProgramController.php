@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Logics\ImageLogic;
 use App\Models\RecruitDepart;
 use App\Models\RecruitLang;
+use App\Models\RecruitQeustion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -22,6 +23,7 @@ class ProgramController extends Controller
             'grade' => $req->grade,
             'depart' => $req->depart,
             'lang' => $req->lang,
+            'question' => $req->question,
             'selectNum'  => $req->selectNum,
             'rStart' => $req->rStart,
             'rEnd' => $req->rEnd,
@@ -58,15 +60,14 @@ class ProgramController extends Controller
 
         $program->rStart = $rStart;
         $program->rEnd = $rEnd;
-        var_dump($program);
         $flag = $program->save();
 
         if ($flag) {
+            // 통일화
             foreach ($data['depart'] as $value) {
                 $departs = new RecruitDepart;
                 $departs->pId = $program->pId;
                 $departs->depart = $value;
-                var_dump($departs);
                 $departs->save();
             }
 
@@ -75,9 +76,17 @@ class ProgramController extends Controller
                 $langs = new RecruitLang;
                 $langs->pId = $program->pId;
                 $langs->lang = $value;
-                var_dump($langs);
                 $langs->save();
             }
+
+            foreach ($data['question'] as $index => $value) {
+                $recQues = new RecruitQeustion();
+                $recQues->pId = $program->pId;
+                $recQues->qNumber = $index+1;
+                $recQues->question = $value;
+                $recQues->save();
+            }
+
         } else {
             return response()->json(
                 [
@@ -93,8 +102,9 @@ class ProgramController extends Controller
     // 정보 확인 공통
     public function showInfo($item, $pId)
     {
-        $departs = RecruitDepart::where('pId', '=', $pId)->get();
-        $langs = RecruitLang::where('pId', '=', $pId)->get();
+        $departs = RecruitDepart::where('pId', $pId)->get();
+        $langs = RecruitLang::where('pId', $pId)->get();
+        $recQues = RecruitQeustion::where('pId', $pId)->get();
 
         $info = [
             'pId' => $item->pId,
@@ -106,7 +116,8 @@ class ProgramController extends Controller
             'actStart' => $item->actStart,
             'actEnd' => $item->actEnd,
             'depart' => $departs,
-            'lang' => $langs
+            'lang' => $langs,
+            'question' => $recQues
         ];
 
         return $info;
@@ -147,12 +158,6 @@ class ProgramController extends Controller
     // 프로그램 등록
     public function store(Request $req)
     {
-
-        // return response($req);
-        // $data = $req->all(); // 라라벨에서 자동으로 배열형태로 바꿔준다
-
-        // $data = json_decode($req->input('json'), true);
-
         $program = new Program;
 
         $data = $this->getRequestData($req); // req를 배열로 반환
@@ -167,10 +172,15 @@ class ProgramController extends Controller
         var_dump($pIdList);
 
         if(!($pIdList->isEmpty())){
-            $pIdList->each(function ($item) use (&$uList) {
+            // $pIdList->each(function ($item) use (&$uList) {
+            //     $result = explode('-', $item, 3);
+            //     array_push($uList, $result[2]);
+            // });
+
+            foreach ($pIdList as $item) {
                 $result = explode('-', $item, 3);
                 array_push($uList, $result[2]);
-            });
+            }
     
             // 중복 확인
             while (in_array($uuid, $uList)) {
@@ -203,7 +213,7 @@ class ProgramController extends Controller
     // 프로그램 상세 정보
     public function programInfo(string $pId)
     {
-        $program = Program::where('pId', '=', $pId)->first(); // 없으면 null
+        $program = Program::where('pId', $pId)->first(); // 없으면 null
 
         $info = $this->showInfo($program, $pId);
 
@@ -233,14 +243,12 @@ class ProgramController extends Controller
     // 프로그램 정보 수정
     public function update(Request $req, string $pId)
     {
-
-        // $data = $req->all();
-        // $data = json_decode($req->input('json'), true);
         $data = $this->getRequestData($req);
 
         $program = Program::find($pId);
-        RecruitDepart::where('pId', '=', $pId)->delete();
-        RecruitLang::where('pId', '=', $pId)->delete();
+        RecruitDepart::where('pId', $pId)->delete();
+        RecruitLang::where('pId', $pId)->delete();
+        RecruitQeustion::where('pId', $pId)->delete();
 
         $imageClass = new ImageLogic;
         $imageClass->deleteImgs($pId, 'program');
@@ -274,7 +282,7 @@ class ProgramController extends Controller
     // 프로그램 삭제
     public function destroy(string $pId)
     {
-        $confirm = Program::where('pId', '=', $pId)->delete();
+        $confirm = Program::where('pId', $pId)->delete();
 
         $imageClass = new ImageLogic;
         $imageClass->deleteImgs($pId, 'program');
