@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Freeboard;
 use App\Http\Logics\ImageLogic;
+use App\Models\Comment;
 
 
 class FreeboardController extends Controller
@@ -60,6 +61,7 @@ class FreeboardController extends Controller
 
         $imageClass = new ImageLogic;
         $images = $imageClass->showImgs($id, 'freeboard');
+        $comment = Comment::where([['category','freeboard'],['uid',$id]])->get();
 
         if (!$freeboard) {
             return response()->json([
