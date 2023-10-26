@@ -33,8 +33,8 @@ class NoticeController extends Controller
     public function store(Request $request) {
         $notice = new Notice;
 
-        $notice->num = count(Notice::all()) + 1;
-        $notice->adminNum = $request->adminNum;
+        $notice->id = count(Notice::all()) + 1;
+        $notice->adminId = auth()->user()->id;
         $notice->title = $request->title;
         $notice->content = $request->content;
         $notice->confirm = $request->confirm;
