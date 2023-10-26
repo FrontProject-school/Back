@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Logics\ImageLogic;
 use App\Models\RecruitDepart;
 use App\Models\RecruitLang;
-use App\Models\RecruitQeustion;
+use App\Models\RecruitQuestion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -80,7 +80,7 @@ class ProgramController extends Controller
             }
 
             foreach ($data['question'] as $index => $value) {
-                $recQues = new RecruitQeustion();
+                $recQues = new RecruitQuestion();
                 $recQues->pId = $program->pId;
                 $recQues->qNumber = $index+1;
                 $recQues->question = $value;
@@ -104,7 +104,7 @@ class ProgramController extends Controller
     {
         $departs = RecruitDepart::where('pId', $pId)->get();
         $langs = RecruitLang::where('pId', $pId)->get();
-        $recQues = RecruitQeustion::where('pId', $pId)->get();
+        $recQues = RecruitQuestion::where('pId', $pId)->get();
 
         $info = [
             'pId' => $item->pId,
@@ -248,7 +248,7 @@ class ProgramController extends Controller
         $program = Program::find($pId);
         RecruitDepart::where('pId', $pId)->delete();
         RecruitLang::where('pId', $pId)->delete();
-        RecruitQeustion::where('pId', $pId)->delete();
+        RecruitQuestion::where('pId', $pId)->delete();
 
         $imageClass = new ImageLogic;
         $imageClass->deleteImgs($pId, 'program');

@@ -12,6 +12,7 @@ class ApplicantAnswer extends Model
     protected $fillable = [
         'pId',
         'studId',
+        'aNumber',
         'answer'
     ];
 }
